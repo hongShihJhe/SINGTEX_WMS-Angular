@@ -1,0 +1,1 @@
+# SINGTEX_WMS
