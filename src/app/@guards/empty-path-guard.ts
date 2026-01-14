@@ -8,7 +8,7 @@ export const emptyPathGuard: CanActivateFn = (route, state) => {
 
   var auth = authService.isAuth()
   if (auth.succ){
-    return router.createUrlTree(['manage', 'home'])
+    return router.createUrlTree(['manage'])
   } else{
     return router.createUrlTree(['login'])
   }
