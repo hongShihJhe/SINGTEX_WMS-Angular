@@ -1,0 +1,10 @@
+{
+    "data": [
+        {"account": "admin", "password": "admin"},
+        {"account": "wms", "password": "wms"},
+        {"account": "john", "password": "john"},
+        {"account": "mary", "password": "mary" },
+        {"account": "kevin", "password": "kevin"},
+        {"account": "jack", "password": "jack"}
+    ]
+}

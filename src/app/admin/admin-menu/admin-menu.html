@@ -1,0 +1,49 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a id="sidebar-brand" class="sidebar-brand d-flex align-items-center justify-content-center"
+        [routerLink]="['home']">
+
+        <div class="sidebar-brand-icon rotate-n-15"></div>
+
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" 
+            data-toggle="collapse" 
+            data-target="#container_menu" 
+            aria-expanded="true"
+            aria-controls="container_menu">
+            <span>載具管理</span>
+        </a>
+
+        <div id="container_menu" class="collapse show" aria-labelledby="">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a [routerLink]="['container_info']" class="collapse-item">載具資訊</a>
+            </div>
+        </div>
+    </li> -->
+
+    <li class="nav-item active">
+        <a class="nav-link collapsed" href="#" 
+            data-toggle="collapse" 
+            data-target="#sys_menu" 
+            aria-expanded="true"
+            aria-controls="sys_menu">
+            <span>系統設定</span>
+        </a>
+
+        <div id="sys_menu" class="collapse show" aria-labelledby="">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a [routerLink]="['user']" class="collapse-item">帳號管理</a>
+                <a [routerLink]="['role']" class="collapse-item">角色管理</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+</ul>

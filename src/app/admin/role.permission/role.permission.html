@@ -1,0 +1,35 @@
+<!-- <h1 class="h3 mb-2 text-gray-800">角色權限</h1> -->
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/admin/role">角色管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">角色權限</li>
+    </ol>
+</nav>
+
+<div class="row mt-1 mb-1">
+    <div class="col-md-4">
+        <div>
+            <label class="control-label">角色代碼: </label>
+            <span class="ml-1">{{role?.role_code}}</span>
+        </div>
+        <div>
+            <label class="control-label">角色名稱: </label>
+            <span class="ml-1">{{role?.role_name}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="mb-2">
+    <button class="btn btn-primary mr-2" (click)="enabledAll()">全部開啟</button>
+    <button class="btn btn-primary mr-2" (click)="disabledAll()">全部關閉</button>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table #table class="table table-hover table-bordered" width="100%" cellspacing="0">
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+
+.modal-btn-confirm {
+    transform: scale(1.3);
+}
+
+.modal-btn-cancel {
+    transform: scale(1.3);
+    margin-left: 1.6rem;
+}
+
+.modal-input {
+    height: 37px;
+    font-size: 18.5px;
+}
+
+.modal-input:focus-visible {
+    outline: unset;
+    outline-color: red;
+    outline-style: solid;
+    outline-width: 3px;
+    border: unset;
+    padding-left: 5px;
+}

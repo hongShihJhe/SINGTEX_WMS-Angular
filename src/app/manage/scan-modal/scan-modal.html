@@ -1,0 +1,23 @@
+<div #modal class="modal fade" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="user-select:none;">
+            <div class="modal-header">
+                <div class="h5 modal-title">{{title}}</div>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <input 
+                    #input 
+                    (keyup.enter)="confirm()"
+                    [value]="value"
+                    [placeholder]="placeholder"
+                     class="modal-input" autocomplete="off" type="text" style="width: 100%;"  />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="confirm()"  type="button" class="modal-btn-confirm btn btn-primary" data-dismiss="modal" >確認</button>
+                <button type="button" class="modal-btn-cancel btn btn-secondary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

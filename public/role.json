@@ -1,0 +1,7 @@
+{
+    "data": [
+        { "role_code": "employeeA", "role_name": "員工A"},
+        { "role_code": "employeeB", "role_name": "員工B"},
+        { "role_code": "employeeC", "role_name": "員工C"}
+    ]
+}

@@ -1,0 +1,19 @@
+nav {
+    background-color: #5682cf;
+    color: #fff;
+    padding: 0.75rem;
+}
+
+a {
+    color: #fff;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.mybreadcrumb {
+    .mybreadcrumb-item.current {
+        color: aquamarine;
+    }
+}

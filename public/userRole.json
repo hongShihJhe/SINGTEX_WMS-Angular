@@ -1,0 +1,10 @@
+{
+    "data": [
+        {"account": "admin", "role_code": "admin"},
+        {"account": "wms", "role_code": "admin"},
+        {"account": "john", "role_code": "employeeA"},
+        {"account": "mary", "role_code": "employeeB"},
+        {"account": "kevin", "role_code": "employeeB"},
+        {"account": "jack", "role_code": "employeeC"}
+    ]
+}

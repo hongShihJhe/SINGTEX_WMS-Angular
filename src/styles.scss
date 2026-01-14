@@ -1,0 +1,79 @@
+/* You can add global styles to this file, and also import other style files */
+.menu-item {
+    background-color: #2196f3;
+    color: white;
+    height: 25vh;
+    margin: 5px;
+    font-size: 1.5rem;
+}
+
+.menu-item-disabled {
+    background-color: grey;
+}
+
+.manage-content {
+    .form {
+        color: #000;
+        padding-right: 1rem;
+    }
+
+    .form .form-group {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .form .control-label {
+        text-align: left;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+
+    .form .btn {
+        white-space: nowrap;
+        width: 6.6rem;
+    }
+
+    thead {
+        background-color: #e2e3e5;
+        color: #000;
+    }
+
+    .dataTables_info {
+        display: none;
+    }
+
+    .scanned {
+        background-color: #1cc88a;
+    }
+
+    .table {
+        color: #000;
+    }
+
+    .table th {
+        font-weight: normal;
+        padding: 0.5rem;
+        vertical-align: baseline !important;
+    }
+
+    .table-click tr:hover {
+        cursor: pointer;
+    }
+
+    .table-click-scanned tr.scanned:hover {
+        cursor: pointer;
+    }
+
+    .card-body {
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.admin-content {
+    .table-click tr:hover {
+        cursor: pointer;
+    }
+}

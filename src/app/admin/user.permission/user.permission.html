@@ -1,0 +1,40 @@
+<!-- <h1 class="h3 mb-2 text-gray-800">角色權限</h1> -->
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/admin/user">帳號管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">帳號權限</li>
+    </ol>
+</nav>
+
+<div class="row mt-1 mb-1">
+    <div class="col-md-4">
+        <div>
+            <label class="control-label">帳號: </label>
+            <span class="ml-1">{{this.account}}</span>
+        </div>
+        <div>
+            <label class="control-label">角色: </label>
+            <span class="ml-1">{{this.role_code}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="mb-2">
+    <button class="btn btn-primary mr-2" (click)="enabledAll()">全部開啟</button>
+    <button class="btn btn-primary mr-2" (click)="disabledAll()">全部關閉</button>
+    <button class="btn btn-primary" (click)="reset()">重置</button>
+</div>
+
+<div>
+    <span>初始尚未設定時帶入角色權限</span>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table #table class="table table-hover table-bordered" width="100%" cellspacing="0">
+            </table>
+        </div>
+    </div>
+</div>

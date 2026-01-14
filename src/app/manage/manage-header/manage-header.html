@@ -1,0 +1,46 @@
+<header class="h5">
+    <nav class="topbar navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+        <div class="mybreadcrumb">
+            @for (item of breadcrumbList; track $index) {
+                @if (!item.current){
+                <a [routerLink]="item.url">
+                    <span class="mybreadcrumb-item" [class.current]="item.current">{{item.name}}</span>
+                </a>
+                } @else {
+                <a>
+                    <span class="mybreadcrumb-item" [class.current]="item.current">{{item.name}}</span>
+                </a>
+                }
+
+                @if ($index != breadcrumbList.length - 1){
+                <span> / </span>
+                }
+            }
+        </div>
+
+        <div class="ml-auto d-flex align-items-center">
+            @if (isAdmin){
+            <div>
+                <a routerLink="/admin/user" class="mr-2">
+                    <span class="text-warning">權限管理</span>
+                </a>
+            </div>
+            }
+            <div>
+                <div>
+                <span class="mr-2">帳號: {{user}}</span>
+
+                </div>
+                <div>
+                <span class="mr-2">角色: {{role_code}}</span>
+
+                </div>
+            </div>
+
+            <div>
+                <span (click)="logout()" role="button">(登出)</span>
+
+            </div>
+        </div>
+    </nav>
+</header>
