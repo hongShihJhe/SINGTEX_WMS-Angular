@@ -1,0 +1,91 @@
+<!-- form -->
+ <form class="form">
+<div class="mb-2 form">
+    <div class="form">
+        <div class="form-group">
+            <button (click)="A01ModalShow()" type="button" class="btn btn-primary">掃描單號</button>
+            <label class="control-label">工單單號:</label>
+            <span>{{inputA01}}</span>
+        </div>
+        <div class="form-group">
+            <button (click)="A02ModalShow()" type="button" class="btn btn-primary invisible"></button>
+            <label class="control-label">製程說明:</label>
+            <span>{{inputA02}}</span>
+        </div>
+        <div class="form-group">
+            <button (click)="A02ModalShow()" type="button" class="btn btn-primary invisible"></button>
+            <label class="control-label">上機機台:</label>
+            <span>{{inputA02}}</span>
+        </div>
+        <div class="form-group">
+            <button (click)="A03ModalShow()" type="button" class="btn btn-primary">掃描布車</button>
+            <label class="control-label">布車編號:</label>
+            <span>{{inputA03}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="form-group-inputs" >
+    <div class="form-group">
+        <label class="control-label">報工人數</label>
+        <input asp-for="ta_shb10" class="form-control" id="ta_shb10" name="ta_shb10" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">線班別</label>
+        <input class="form-control" id="shb08" name="shb08" value="A" disabled />
+    </div>
+    <div class="form-group ">
+        <label class="control-label">重量</label>
+        <input class="form-control" type="number" id="tc_shb901" name="tc_shb901" value="0" autocomplete="off" />
+    </div>
+    <div class="form-group ">
+        <label class="control-label">碼長</label>
+        <input class="form-control" type="number" id="tc_shb902" name="tc_shb902" value="0" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">幅寬</label>
+        <input class="form-control" type="number" id="tc_shb903" name="tc_shb903" value="0" autocomplete="off" />
+
+        <label class="control-label">幅寬</label>
+        <input class="form-control" type="number" id="TC_ECJ05" name="TC_ECJ05" autocomplete="off" disabled />
+    </div>
+    <div class="form-group">
+        <label class="control-label">緯密</label>
+        <input class="form-control" type="number" id="tc_shb904" name="tc_shb904" value="0" autocomplete="off" />
+
+        <label class="control-label">緯密</label>
+        <input class="form-control" type="number" id="TC_ECJ11" name="TC_ECJ11" autocomplete="off" disabled />
+    </div>
+    <div class="form-group">
+        <label class="control-label">碼重</label>
+        <input class="form-control" type="number" id="tc_shb905" name="tc_shb905" value="0" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <label class="control-label">平方米重</label>
+        <input class="form-control" type="number" id="cal01" name="cal01" autocomplete="off" disabled />
+    </div>
+    <div class="form-group justify-content-center">
+    </div>
+</div>
+</form>
+
+<!-- btns-->
+<div style="text-align:center;position: relative;" class="mb-3">
+    <button id="mysubmit" type="button" class="btn btn-success btn-lg">確定報工</button>
+
+    <!-- @if (!scan_completed){
+        <button (click)="scanModalShow()" type="button" class="btn btn-primary btn-lg">開始掃描</button>
+    } @else {
+        <button (click)="submit()" type="button" class="btn btn-success btn-lg">確認點收</button>
+    } -->
+    <!-- <button (click)="submit()" type="button" class="btn btn-success btn-lg" [class.invisible]="!table_data.length || !inputA02">確認發料</button> -->
+</div>
+
+
+<div class="d-flex">
+
+</div>
+
+<app-scan-modal #A01Modal [title]="'掃描單號'" [value]="''" (onConfirm)="A01ModalConfirm($event)"></app-scan-modal>
+<app-scan-modal #A02Modal [title]="'掃描料件'" [value]="''" (onConfirm)="A02ModalConfirm($event)"></app-scan-modal>
+<app-scan-modal #A03Modal [title]="'掃描機台'" [value]="''" (onConfirm)="A03ModalConfirm($event)"></app-scan-modal>

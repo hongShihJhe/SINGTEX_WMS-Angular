@@ -1,4 +1,4 @@
-export class DataTableHelper {
+export class DataTableUtil {
 
     static checkRowNull(row: any) {
         return row[0].length === 0

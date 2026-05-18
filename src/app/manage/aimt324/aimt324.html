@@ -1,36 +1,84 @@
-<!-- btns-->
-<div style="text-align:center;position: relative;" class="mb-3">
-    <button (click)="scanModalShow()" type="button" class="btn btn-primary btn-lg">開始掃描</button>
-    @if (table_data_confimed.length > 0){
-        <button (click)="submit()" type="button" class="btn btn-success btn-lg ml-2">確認調撥</button>
-    }
+<div class="container">
+    <div class="row">
+        @if (aimt324_auth){
+        <div class=" col-6 col-lg-4">
+            <a [routerLink]="['aimt3240']">
+                <div class="menu-item d-flex flex-column text-center justify-content-center">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <label class="title">{{prg_names.get("aimt3240")}}</label>
+                    </div>
+                </div>
+            </a>
+        </div>
+        }
 
-    <div style="display:inline;position: absolute;right:1rem;top:50%;transform:translateY(-50%)">
-        <span>{{rows_count}}</span>
+
+        @if (container_change_auth){
+        <div class=" col-6 col-lg-4">
+            <a [routerLink]="['aimt3241']">
+                <div class="menu-item d-flex flex-column text-center justify-content-center">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <label class="title">{{prg_names.get("aimt3241")}}</label>
+                    </div>
+                </div>
+            </a>
+        </div>
+        }
+
+
+        @if (container_transfer_auth){
+        <div class=" col-6 col-lg-4">
+            <a [routerLink]="['aimt3242']">
+                <div class="menu-item d-flex flex-column text-center justify-content-center">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <label class="title">{{prg_names.get("aimt3242")}}</label>
+                    </div>
+                </div>
+            </a>
+        </div>
+        }
+
+
+        @if (container_binding_auth){
+        <div class=" col-6 col-lg-4">
+            <a [routerLink]="['aimt3243']">
+                <div class="menu-item d-flex flex-column text-center justify-content-center">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <label class="title">{{prg_names.get("aimt3243")}}</label>
+                    </div>
+                </div>
+            </a>
+        </div>
+        }
+
+
     </div>
 </div>
-
-<!-- table -->
-<div class="card shadow mb-4">
-    <!-- <div class="card-header py-3 " style="display:flex">
-         <h6 class="m-0 font-weight-bold text-primary">Table</h6> 
-        <div>
-            <span>應處理</span>
-            <span>已處理</span>
-        </div>
-        <div style="margin-left:auto">
-            <button type="button">存</button>
-            <button type="button"></button>
-        </div>
-    </div> -->
-    <div class="card-body" style="padding-top:0;">
-        <div class="table-responsive">
-            <table #table class="table table-click table-bordered" width="100%" cellspacing="0">
-            </table>
-        </div>
-    </div>
-</div>
-
-<app-scan-modal #scanImgsModal [title]="'開始掃描'" [placeholder]="'製造批號或布疋號'" (onConfirm)="scanImgsModalConfirm($event)"></app-scan-modal>
-<app-scan-modal #scanContainerModal [title]="'掃描目的載體'" [placeholder]="''" (onConfirm)="scanContainerModalConfirm($event)"></app-scan-modal>
-    

@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Cimt302a2Service } from '../../@services/cimt302a2-service';
-import { SweetAlert2Helper } from '../../@utils/SweetAlert2Helper';
 import { DateUtil } from '../../@utils/DateUtil';
+import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   selector: 'app-cimt302a2',
@@ -22,7 +22,7 @@ export class Cimt302a2 implements OnInit, AfterViewInit {
     return 0
   }
 
-  constructor(private cimt302a2APi: Cimt302a2Service) {
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a2APi: Cimt302a2Service) {
 
   }
 
@@ -119,7 +119,7 @@ export class Cimt302a2 implements OnInit, AfterViewInit {
   fetchData() {
     this.cimt302a2APi.getList().then(data => {
       if (data.length === 0) {
-        SweetAlert2Helper.Alert(`沒有資料`)
+        this._IAlert.Alert(`沒有資料`)
       } else {
         this.table.rows.add(data).draw()
       }

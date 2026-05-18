@@ -12,7 +12,6 @@ export class BreadcrumbService {
 
   breadcrumb$ = this.breadcrumbSource.asObservable()
 
-
   push(data: breadcrumb_item[]){
     this.breadcrumbSource.next(data)
   }

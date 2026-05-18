@@ -1,0 +1,53 @@
+<!-- form -->
+<div class="mb-2">
+    <div class="form">
+        <div class="form-group">
+            <button (click)="A01ModalShow()" type="button" class="btn btn-primary">掃描位置</button>
+            <label class="control-label">位置代號:</label>
+            <span>{{inputA01}}</span>
+
+            <div style="margin-left:auto">
+                <span>{{rows_count}}</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <button (click)="A02ModalShow()" type="button" class="btn btn-primary">掃描載體</button>
+            <label class="control-label">載體:</label>
+            <span>{{inputA02}}</span>
+        </div>
+    </div>
+</div>
+
+<!-- btns-->
+<div style="text-align:center;position: relative;" class="mb-3">
+    <!-- @if (!scan_completed){
+        <button (click)="scanModalShow()" type="button" class="btn btn-primary btn-lg">開始掃描</button>
+    } @else {
+        <button (click)="submit()" type="button" class="btn btn-success btn-lg">確認點收</button>
+    } -->
+    <button (click)="submit()" type="button" class="btn btn-success btn-lg" [class.invisible]="!table_data.length || !inputA02">確認領料</button>
+</div>
+
+<!-- table -->
+<div class="card shadow mb-4">
+    <!-- <div class="card-header py-3 " style="display:flex">
+         <h6 class="m-0 font-weight-bold text-primary">Table</h6> 
+        <div>
+            <span>應處理</span>
+            <span>已處理</span>
+        </div>
+        <div style="margin-left:auto">
+            <button type="button">存</button>
+            <button type="button"></button>
+        </div>
+    </div> -->
+    <div class="card-body" style="padding-top:0;">
+        <div class="table-responsive">
+            <table #table class="table table-click-scanned table-bordered" width="100%" cellspacing="0">
+            </table>
+        </div>
+    </div>
+</div>
+
+<app-scan-modal #A01Modal [title]="'掃描單號'" [value]="''" (onConfirm)="A01ModalConfirm($event)"></app-scan-modal>
+<app-scan-modal #A02Modal [title]="'掃描載體'" [value]="''" (onConfirm)="A01ModalConfirm($event)"></app-scan-modal>

@@ -1,4 +1,9 @@
 export class SubmitResult {
     succ = true
-    message = ""
+    code?: string
+    message = ''
+}
+
+export class SubmitResultWithData<T> extends SubmitResult {
+    data?: T
 }

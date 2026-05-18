@@ -3,14 +3,13 @@ import { ContainerService } from './container-service';
 import { Injectable } from '@angular/core';
 import { SubmitResult } from '../@models/SubmitResult';
 import { Aimt324View } from '../@models/Aimt324View';
-import { ContainerImgsInfo } from '../@models/ContainerImgsInfo';
 import { ContainerImgs } from '../@models/ContainerImgs';
 import { TransferItem } from '../@models/TransferItem';
-import { GlobalParams } from '../@models/GlobalParams';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class Aimt324Service {
 
   constructor(private containerService: ContainerService, private imgsFileService: ImgsFileService) {

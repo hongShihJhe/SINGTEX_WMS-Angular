@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../@services/auth-service';
-import { SweetAlert2Helper } from '../@utils/SweetAlert2Helper';
+import { IAlertToken } from '../@interfaces/IAlert';
 
 export const authGuard: CanActivateFn = (route, state) => {
   let authService = inject(AuthService)
@@ -10,6 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   let router = inject(Router)
+  let _IAlert = inject(IAlertToken)
 
   var auth = authService.isAuth()
   if (!auth.succ) {
@@ -28,7 +29,7 @@ export const authGuard: CanActivateFn = (route, state) => {
       return true
     }
     else {
-      SweetAlert2Helper.AlertError('沒有權限')
+      _IAlert.AlertError('沒有權限')
 
       return false
       // return router.navigateByUrl('/manage')

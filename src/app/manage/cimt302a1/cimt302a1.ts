@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
-import { DataTableHelper } from '../../@utils/DataTableHelper';
-import { SweetAlert2Helper } from '../../@utils/SweetAlert2Helper';
+import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { Cimt302a1Service } from '../../@services/cimt302a1-service';
+import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   standalone: true,
@@ -61,7 +61,7 @@ export class Cimt302a1 implements OnInit, AfterViewInit {
   @ViewChild('A02Modal') A02Modal!: ScanModal
   @ViewChild('scanModal') scanModal!: ScanModal
 
-  constructor(private cimt302a1Service: Cimt302a1Service) {
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a1Service: Cimt302a1Service) {
 
   }
 
@@ -176,7 +176,7 @@ export class Cimt302a1 implements OnInit, AfterViewInit {
     this.table.clear().draw()
     this.cimt302a1Service.getListByContainer(value).then(data => {
       if (data.length === 0) {
-        SweetAlert2Helper.Alert(`載體 ${value} 需點收未上架`)
+        this._IAlert.Alert(`載體 ${value} 需點收未上架`)
       } else {
         this.table.rows.add(data).draw()
       }
@@ -195,15 +195,15 @@ export class Cimt302a1 implements OnInit, AfterViewInit {
     if (!value || !value.trim()) {
       return
     }
-    let row = DataTableHelper.getRow(this.table, ['TA_RVBS14', 'RVBS04'], value)
+    let row = DataTableUtil.getRow(this.table, ['TA_RVBS14', 'RVBS04'], value)
     let rowData = row && row.data()
 
     // check 
     if (!rowData) {
-      SweetAlert2Helper.Alert(value + '不存在!')
+      this._IAlert.Alert(value + '不存在!')
       return
     } else if (rowData._confirm === 'Y') {
-      SweetAlert2Helper.Alert(value + ' 已掃描!')
+      this._IAlert.Alert(value + ' 已掃描!')
       return
     }
 
@@ -229,7 +229,7 @@ export class Cimt302a1 implements OnInit, AfterViewInit {
       var rowData = row.data()
 
       if (rowData._confirm === 'Y') {
-        SweetAlert2Helper.Confirm('確認要取消嗎?', () => {
+        this._IAlert.Confirm('確認要取消嗎?', () => {
           self.cancelConfirmedRow(row)
         })
       }
@@ -247,14 +247,14 @@ export class Cimt302a1 implements OnInit, AfterViewInit {
   }
 
   submit() {
-    SweetAlert2Helper.Confirm('確認要上架嗎?', () => {
+    this._IAlert.Confirm('確認要上架嗎?', () => {
       this.cimt302a1Service.submit(this.inputA01!, this.inputA02!, this.table_data).then(result => {
         if (result.succ) {
-          SweetAlert2Helper.AlertSucc('上架成功', () => {
+          this._IAlert.AlertSucc('上架成功', () => {
             this.clear()
           })
         } else {
-          SweetAlert2Helper.AlertError(result.message)
+          this._IAlert.AlertError(result.message)
         }
       })
     })

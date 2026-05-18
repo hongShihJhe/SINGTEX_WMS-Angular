@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Cimt302aView } from '../@models/Cimt302aView';
 import { PlatformLocation } from '@angular/common';
 import { SubmitResult } from '../@models/SubmitResult';
-import { Cimt302aApi } from './cimt302a-api';
+import { Cimt302aApi } from '../@data/cimt302a-api';
 import { ContainerImgs } from '../@models/ContainerImgs';
 
 @Injectable({

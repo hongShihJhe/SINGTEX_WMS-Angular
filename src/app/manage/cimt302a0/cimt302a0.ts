@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
-import { DataTableHelper } from '../../@utils/DataTableHelper';
-import { SweetAlert2Helper } from '../../@utils/SweetAlert2Helper';
+import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { Cimt302a0Service } from '../../@services/cimt302a0-service';
+import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   standalone: true,
@@ -55,7 +55,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
   @ViewChild('A02Modal') A02Modal!: ScanModal
   @ViewChild('scanModal') scanModal!: ScanModal
 
-  constructor(private cimt302a0Service: Cimt302a0Service) {
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a0Service: Cimt302a0Service) {
 
   }
 
@@ -187,15 +187,15 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
     if (!value || !value.trim()) {
       return
     }
-    let row = DataTableHelper.getRow(this.table, ['TA_RVBS14', 'RVBS04'], value)
+    let row = DataTableUtil.getRow(this.table, ['TA_RVBS14', 'RVBS04'], value)
     let rowData = row && row.data()
 
     // check 
     if (!rowData) {
-      SweetAlert2Helper.Alert(value + '不存在!')
+      this._IAlert.Alert(value + '不存在!')
       return
     } else if (rowData._confirm === 'Y') {
-      SweetAlert2Helper.Alert(value + ' 已掃描!')
+      this._IAlert.Alert(value + ' 已掃描!')
       return
     }
 
@@ -222,7 +222,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
       var rowData = row.data()
 
       if (rowData._confirm === 'Y') {
-        SweetAlert2Helper.Confirm('確認要取消嗎?', () => {
+        this._IAlert.Confirm('確認要取消嗎?', () => {
           self.cancelConfirmedRow(row)
         })
       }
@@ -240,14 +240,14 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
   }
 
   submit() {
-    SweetAlert2Helper.Confirm('確認要點收嗎?', () => {
+    this._IAlert.Confirm('確認要點收嗎?', () => {
       this.cimt302a0Service.submit(this.table_data_confimed).then(result => {
         if (result.succ) {
-          SweetAlert2Helper.AlertSucc('點收成功', () => {
+          this._IAlert.AlertSucc('點收成功', () => {
             this.clear()
           })
         } else {
-          SweetAlert2Helper.AlertError(result.message)
+          this._IAlert.AlertError(result.message)
         }
       })
     })

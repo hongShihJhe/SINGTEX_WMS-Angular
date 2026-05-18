@@ -1,9 +1,11 @@
+import { IAlertToken } from './@interfaces/IAlert';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { authInterceptor } from './@interceptors/auth-interceptor';
+import { SweetAlert2Util } from './@utils/SweetAlert2Util';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,5 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
+    SweetAlert2Util,
+    {provide: IAlertToken, useExisting: SweetAlert2Util}
   ]
 };

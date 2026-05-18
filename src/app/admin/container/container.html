@@ -1,0 +1,40 @@
+<h1 class="h3 mb-2 text-gray-800">載具清單</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">載具類型</label>
+            <select [(ngModel)]="form_container_type" class="form-control">
+                <option value="">-----請選擇-----</option>
+                @for (item of type_list; track $index) {
+                    <option value="{{item}}">{{item}}</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">載具號碼</label>
+            <input [(ngModel)]="form_container_no" class="form-control" placeholder="請輸入3位數字" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">備註</label>
+            <textarea [(ngModel)]="form_memo" class="form-control" placeholder="限制50字" ></textarea>
+        </div>
+
+        <div class="form-group">
+            <button type="button" (click)="add()" class="btn btn-primary" [disabled]="submitting">新增</button>
+            <button type="button" (click)="update()" class="btn btn-primary ml-2" [disabled]="submitting">修改</button>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table #table class="table table-hover table-bordered" width="100%" cellspacing="0">
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Cimt302aApi } from './cimt302a-api';
+import { Cimt302aApi } from '../@data/cimt302a-api';
 import { AuthService } from './auth-service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';

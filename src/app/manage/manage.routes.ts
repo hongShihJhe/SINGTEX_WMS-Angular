@@ -54,59 +54,59 @@ export const ManageRoutes: Route[] = [
         } 
     },
     { 
-        path: 'transfer', loadComponent: () => import('./transfer/transfer').then(m => m.Transfer),
+        path: 'aimt324', loadComponent: () => import('./aimt324/aimt324').then(m => m.Aimt324),
         resolve: { breadcrumbLoad: breadcrumbResolver },
         data: {
             breadcrumb: [
                 { url: '/manage', name: '主選單' },
-                { url: '/manage/transfer', name: FuncNames.get('transfer'), current: true },
+                { url: '/manage/aimt324', name: FuncNames.get('aimt324'), current: true },
             ],
         }
     },
     { 
-        path: 'transfer/aimt324', loadComponent: () => import('./aimt324/aimt324').then(m => m.Aimt324),
+        path: 'aimt324/aimt3240', loadComponent: () => import('./aimt3240/aimt3240').then(m => m.Aimt3240),
         resolve: { breadcrumbLoad: breadcrumbResolver },
         data: {
             breadcrumb: [
                 { url: '/manage', name: '主選單' },
-                { url: '/manage/transfer', name: FuncNames.get('transfer') },
-                { url: '/manage/aimt324', name: FuncNames.get('aimt324'), current: true },
+                { url: '/manage/aimt324', name: FuncNames.get('aimt324') },
+                { url: '/manage/aimt3240', name: FuncNames.get('aimt3240'), current: true },
             ],
             func: 'aimt324',
         }
     },
     { 
-        path: 'transfer/container_change', loadComponent: () => import('./container_change/container_change').then(m => m.ContainerChange),
+        path: 'aimt324/aimt3241', loadComponent: () => import('./aimt3241/aimt3241').then(m => m.Aimt3241),
         resolve: { breadcrumbLoad: breadcrumbResolver },
         data: {
             breadcrumb: [
                 { url: '/manage', name: '主選單' },
-                { url: '/manage/transfer', name: FuncNames.get('transfer') },
-                { url: '/manage/container_change', name: FuncNames.get('container_change'), current: true },
+                { url: '/manage/aimt324', name: FuncNames.get('aimt324') },
+                { url: '/manage/aimt3241', name: FuncNames.get('aimt3241'), current: true },
             ],
             func: 'container_change',
         }
     },
     { 
-        path: 'transfer/container_transfer', loadComponent: () => import('./container_transfer/container_transfer').then(m => m.ContainerTransfer),
+        path: 'aimt324/aimt3242', loadComponent: () => import('./aimt3242/aimt3242').then(m => m.Aimt3242),
         resolve: { breadcrumbLoad: breadcrumbResolver },
         data: {
             breadcrumb: [
                 { url: '/manage', name: '主選單' },
-                { url: '/manage/transfer', name: FuncNames.get('transfer') },
-                { url: '/manage/container_transfer', name: FuncNames.get('container_transfer'), current: true },
+                { url: '/manage/aimt324', name: FuncNames.get('aimt324') },
+                { url: '/manage/aimt3242', name: FuncNames.get('aimt3242'), current: true },
             ],
             func: 'container_transfer',
         }
     },
     { 
-        path: 'transfer/container_binding', loadComponent: () => import('./container_binding/container_binding').then(m => m.ContainerBinding),
+        path: 'aimt324/aimt3243', loadComponent: () => import('./aimt3243/aimt3243').then(m => m.Aimt3243),
         resolve: { breadcrumbLoad: breadcrumbResolver },
         data: {
             breadcrumb: [
                 { url: '/manage', name: '主選單' },
-                { url: '/manage/transfer', name: FuncNames.get('transfer') },
-                { url: '/manage/container_binding', name: FuncNames.get('container_binding'), current: true },
+                { url: '/manage/aimt324', name: FuncNames.get('aimt324') },
+                { url: '/manage/aimt3243', name: FuncNames.get('aimt3243'), current: true },
             ],
             func: 'container_binding',
         }
@@ -144,5 +144,188 @@ export const ManageRoutes: Route[] = [
             ],
             func: 'search_imgs',
         }
-    }
+    },
+    { 
+        path: 'csfi514', loadComponent: () => import('./csfi514/csfi514').then(m => m.Csfi514),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi514', name: FuncNames.get('csfi514'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'csfi514/csfi5140', loadComponent: () => import('./csfi5140/csfi5140').then(m => m.Csfi5140),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi514', name: FuncNames.get('csfi514') },
+                { url: '/manage/csfi5140', name: FuncNames.get('csfi5140'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'csfi514/csfi5141', loadComponent: () => import('./csfi5141/csfi5141').then(m => m.Csfi5141),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi514', name: FuncNames.get('csfi514') },
+                { url: '/manage/csfi5141', name: FuncNames.get('csfi5141'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'csfi514/csfi5142', loadComponent: () => import('./csfi5142/csfi5142').then(m => m.Csfi5142),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi514', name: FuncNames.get('csfi514') },
+                { url: '/manage/csfi5142', name: FuncNames.get('csfi5142'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'csfi514/csfi5143', loadComponent: () => import('./csfi5143/csfi5143').then(m => m.Csfi5143),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi514', name: FuncNames.get('csfi514') },
+                { url: '/manage/csfi5143', name: FuncNames.get('csfi5143'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620', loadComponent: () => import('./asft620/asft620').then(m => m.Asft620),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620/asft6200', loadComponent: () => import('./asft6200/asft6200').then(m => m.Asft6200),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620') },
+                { url: '/manage/asft6200', name: FuncNames.get('asft6200'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620/asft6201', loadComponent: () => import('./asft6201/asft6201').then(m => m.Asft6201),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620') },
+                { url: '/manage/asft6201', name: FuncNames.get('asft6201'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620/asft6202', loadComponent: () => import('./asft6202/asft6202').then(m => m.Asft6202),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620') },
+                { url: '/manage/asft6202', name: FuncNames.get('asft6202'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620/asft6203', loadComponent: () => import('./asft6203/asft6203').then(m => m.Asft6203),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620') },
+                { url: '/manage/asft6203', name: FuncNames.get('asft6203'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft620/asft6204', loadComponent: () => import('./asft6204/asft6204').then(m => m.Asft6204),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft620', name: FuncNames.get('asft620') },
+                { url: '/manage/asft6204', name: FuncNames.get('asft6204'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft700', loadComponent: () => import('./asft700/asft700').then(m => m.Asft700),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft700', name: FuncNames.get('asft700'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft700/asft7000', loadComponent: () => import('./asft7000/asft7000').then(m => m.Asft7000),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft700', name: FuncNames.get('asft700') },
+                { url: '/manage/asft700/asft7000', name: FuncNames.get('asft7000'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft700/asft7001', loadComponent: () => import('./asft7001/asft7001').then(m => m.Asft7001),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft700', name: FuncNames.get('asft700') },
+                { url: '/manage/asft700/asft7001', name: FuncNames.get('asft7001'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft700/asft7002', loadComponent: () => import('./asft7002/asft7002').then(m => m.Asft7002),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft700', name: FuncNames.get('asft700') },
+                { url: '/manage/asft700/asft7002', name: FuncNames.get('asft7002'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'asft700/asft7003', loadComponent: () => import('./asft7003/asft7003').then(m => m.Asft7003),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/asft700', name: FuncNames.get('asft700') },
+                { url: '/manage/asft700/asft7002', name: FuncNames.get('asft7003'), current: true },
+            ],
+        }
+    },
+    { 
+        path: 'csfi301', loadComponent: () => import('./csfi301/csfi301').then(m => m.Csfi301),
+        resolve: { breadcrumbLoad: breadcrumbResolver },
+        data: {
+            breadcrumb: [
+                { url: '/manage', name: '主選單' },
+                { url: '/manage/csfi301', name: FuncNames.get('csfi301'), current: true },
+            ],
+        }
+    },
 ]
