@@ -24,12 +24,7 @@ export class Login implements OnInit {
   }
 
   ngOnInit(): void {
-    let remember = localStorage.getItem(this.localStorageKey)
-    if (remember) {
-      let oRemember: any = JSON.parse(remember)
-      this.Account = oRemember.Account
-      this.RememberMe = oRemember.RememberMe
-    }
+    this.rememberMe()
   }
 
   login() {
@@ -38,20 +33,26 @@ export class Login implements OnInit {
       return
     }
 
-    var succCallback = (result: LoginResult) => {
-
-      this.router.navigateByUrl("/manage")
-      this.rememberMe()
-    }
-
-    var failCallback = (result: LoginResult) => {
-      alert(result.message)
-    }
-
-    this.authService.login(this.Account, this.Password, succCallback, failCallback)
+    this.authService.login(this.Account, this.Password).then(res => {
+      if (res.succ){
+        this.router.navigateByUrl("/manage")
+        this.setRememberMe()
+      } else {
+        alert(res.message)
+      }
+    })
   }
 
   rememberMe() {
+    let remember = localStorage.getItem(this.localStorageKey)
+    if (remember) {
+      let oRemember: any = JSON.parse(remember)
+      this.Account = oRemember.Account
+      this.RememberMe = oRemember.RememberMe
+    }
+  }
+
+  setRememberMe() {
     if (this.RememberMe) {
       let data = {
         Account: this.Account,

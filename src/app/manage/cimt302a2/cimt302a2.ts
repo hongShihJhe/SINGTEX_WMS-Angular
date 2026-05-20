@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild
 import { Cimt302a2Service } from '../../@services/cimt302a2-service';
 import { DateUtil } from '../../@utils/DateUtil';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
 
 @Component({
   selector: 'app-cimt302a2',
@@ -9,21 +10,12 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
   templateUrl: './cimt302a2.html',
   styleUrl: './cimt302a2.scss',
 })
-export class Cimt302a2 implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
+export class Cimt302a2 extends BasePDAComponent implements OnInit, AfterViewInit {
 
   @ViewChild('table') tableRef!: ElementRef
 
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a2APi: Cimt302a2Service) {
-
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a2Service: Cimt302a2Service) {
+    super()
   }
 
   ngOnInit(): void {
@@ -31,12 +23,12 @@ export class Cimt302a2 implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.init_table()
-    this.fetchData()
+    this.fetchTableData()
   }
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+    let options = {
       processing: true,
       searching: true,
       serverSide: false,
@@ -92,7 +84,7 @@ export class Cimt302a2 implements OnInit, AfterViewInit {
           }
         },
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (this:any, settings: any) {
         var api = this.api();
 
         api.rows().every(function (this: any) {
@@ -109,19 +101,16 @@ export class Cimt302a2 implements OnInit, AfterViewInit {
 
       },
       initComplete: function (settings: any, json: any) { },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    }
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
 
-  fetchData() {
-    this.cimt302a2APi.getList().then(data => {
+  fetchTableData() {
+    this.cimt302a2Service.getList().then(data => {
       if (data.length === 0) {
         this._IAlert.Alert(`沒有資料`)
       } else {
-        this.table.rows.add(data).draw()
+        this.addTableRow(data)
       }
     })
   }

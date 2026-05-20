@@ -1,10 +1,11 @@
 import { ContainerService } from '../../@services/container-service';
-import { Aimt324Service } from '../../@services/aimt324-service';
+import { Aimt3240Service } from '../../@services/aimt3240-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
 
 @Component({
   standalone: true,
@@ -14,52 +15,22 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
   styleUrl: './aimt3240.scss',
 })
 
-export class Aimt3240 implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
+export class Aimt3240 extends BasePDAComponent implements OnInit, AfterViewInit {
+  override fetchTableData(): void {
+    throw new Error('Method not implemented.');
+  }
+
   inputA01?: string
   inputA02?: string
 
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-  get scanned_count() {
-    if (this.table) {
-      return this.table.rows((idx: any, data: any) => data._confirm === 'Y').count()
-    }
-    return 0
-  }
-  get scan_completed() {
-    if (!this.table) {
-      return null
-    }
-    if (this.rows_count > 0) {
-      let hasNotConfirmedData = this.table.row((idx: any, data: any) => data._confirm !== 'Y').data()
-      return !hasNotConfirmedData
-    }
-    return false
-  }
-  get table_data(): any[] {
-    if (this.table) {
-      return this.table.rows().data().toArray()
-    }
-    return []
-  }
-  get table_data_confimed(): any[] {
-    return this.table_data.filter((item: any) => item._confirm === 'Y')
-  }
-
-
+  _select_row: any
 
   @ViewChild('table') tableRef!: ElementRef
   @ViewChild('scanImgsModal') scanImgsModal!: ScanModal
   @ViewChild('scanContainerModal') scanContainerModal!: ScanModal
 
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert,private aimt324Service: Aimt324Service, private containerService: ContainerService) {
-
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert,private aimt3240Service: Aimt3240Service) {
+    super()
   }
 
   ngOnInit(): void {
@@ -68,13 +39,12 @@ export class Aimt3240 implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.init_table()
     this.scanContainerEvent()
-    this.cancelConfirmedRowEvent()
-    this.deleteRowEvent()
+    this.cancelRowEvent()
   }
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+    let options = {
       processing: true,
       searching: false,
       serverSide: false,
@@ -87,9 +57,6 @@ export class Aimt3240 implements OnInit, AfterViewInit {
       //     d.A01 = self.inputA01
       //   }
       // },
-      columnDefs: [
-        { targets: '_all', orderable: false, defaultContent: '' },
-      ],
       order: [[1, 'asc']], // order 
       columns: [
         {
@@ -161,7 +128,7 @@ export class Aimt3240 implements OnInit, AfterViewInit {
           }
         },
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (this:any, settings: any) {
         var api = this.api();
         api.rows().every(function (this: any) {
           var row = this
@@ -174,25 +141,12 @@ export class Aimt3240 implements OnInit, AfterViewInit {
 
           row.invalidate(); // invalidate the data DataTables has cached for this row
         });
-
       },
       initComplete: function (settings: any, json: any) { },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    }
+
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
-
-
-  scanModalShow() {
-    this.scanImgsModal.show()
-  }
-
-  scanContainerModalShow() {
-    this.scanContainerModal.show()
-  }
-
 
   scanImgsModalConfirm(value: string) {
     if (!value || !value.trim()) {
@@ -208,11 +162,11 @@ export class Aimt3240 implements OnInit, AfterViewInit {
       return
     }
 
-    this.aimt324Service.getData(value).then(data => {
+    this.aimt3240Service.getData(value).then(data => {
       if (!data) {
-        alert('沒有資料')
+        this._IAlert.AlertWarn('沒有資料')
       } else {
-        this.table.rows.add([data]).draw()
+        this.addTableRow([data])
 
         // keep scan
         if (!this.scan_completed) {
@@ -221,11 +175,8 @@ export class Aimt3240 implements OnInit, AfterViewInit {
           }, 400)
         }
       }
-
     })
   }
-
-  private _select_row: any
 
   scanContainerEvent() {
     let table = this.table
@@ -236,51 +187,57 @@ export class Aimt3240 implements OnInit, AfterViewInit {
       var row = table.row($tr[0])
       var rowData = row.data()
 
-      self.scanContainerModalShow()
-
       self._select_row = row
+      self.scanContainerModal.show()
     })
-
   }
 
   scanContainerModalConfirm(value: string) {
-    this.containerService.getLocation(value).then(data => {
-      if (!data || !data.IMGS03) {
+    this.aimt3240Service.getContainerIME02(value).then(ime02 => {
+      if (!ime02) {
         this._IAlert.AlertWarn(`載體${value}儲位為空，請先進行載體綁定`)
       }
       else {
-        let rowData = this._select_row.data()
-        if (data) {
+        let row = this._select_row
+        if (row) {
+          let rowData = row.data()
           rowData.to_container = value
-          rowData.to_container_IMGS03 = data.IMGS03
+          rowData.to_container_IMGS03 = ime02
           rowData.to_container_selected = 'Y'
-          this.confirm_rowData(rowData)
+          rowData._confirm = 'Y'
           this._select_row.data(rowData).draw()
         }
       }
     })
   }
 
-  private confirm_rowData(rowData: any) {
-    if (rowData.to_container_selected === 'Y') {
-      rowData._confirm = 'Y'
-    }
-  }
 
-  cancelConfirmedRowEvent() {
+  cancelRowEvent() {
     let table = this.table
     let self = this
 
+    // cancel
     $(this.tableRef.nativeElement).on('click', 'tr.scanned', function (this: any, e: any) {
       var $tr = $(this).closest('tr');
       var row = table.row($tr[0])
       var rowData = row.data()
 
       if (rowData._confirm === 'Y') {
-        this._IAlert.ConfirmWarn('確認要取消嗎?', () => {
+        self._IAlert.ConfirmWarn('確認要取消嗎?', () => {
           self.cancelConfirmedRow(row)
         })
       }
+    })
+
+    // delete
+    $(this.tableRef.nativeElement).on('click', 'tr:not(.scanned) td:not(.select-td)', function (this: any, e: any) {
+      var $tr = $(this).closest('tr');
+      var row = table.row($tr[0])
+      var rowData = row.data()
+
+      self._IAlert.ConfirmWarn('確認要刪除嗎?', () => {
+        self.deleteTableRow(row)
+      })
     })
   }
 
@@ -295,31 +252,14 @@ export class Aimt3240 implements OnInit, AfterViewInit {
     $(node).removeClass('scanned')
   }
 
-  deleteRowEvent() {
-    let table = this.table
-    let self = this
-
-    $(this.tableRef.nativeElement).on('click', 'tr:not(.scanned) td:not(.select-td)', function (this: any, e: any) {
-      var $tr = $(this).closest('tr');
-      var row = table.row($tr[0])
-      var rowData = row.data()
-
-      this._IAlert.ConfirmWarn('確認要刪除嗎?', () => {
-        self.deleteRow(row)
-      })
-    })
-  }
-
-  deleteRow(row: any) {
-    row.remove().draw()
-  }
 
   submit() {
     this._IAlert.Confirm('確認要調撥嗎?', () => {
-      this.aimt324Service.submit(this.table_data_confimed).then(result => {
+      this.aimt3240Service.submit(this.table_data_confimed).then(result => {
         if (result.succ) {
           this._IAlert.AlertSucc('調撥成功', () => {
-            this.clear()
+            this.clearForm()
+            this.clearTable()
           })
         } else {
           this._IAlert.AlertError(result.message)
@@ -328,10 +268,9 @@ export class Aimt3240 implements OnInit, AfterViewInit {
     })
   }
 
-  clear() {
+  clearForm() {
     this.inputA01 = ''
     this.inputA02 = ''
-    this.table.clear().draw()
   }
 
 }

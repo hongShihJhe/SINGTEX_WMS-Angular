@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, Inject, Renderer2, DOCUMENT } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContainerTypeService } from '../../@services/container-type-service';
 import { Container as ContainerModel } from '../../@models/Container';
@@ -21,25 +21,15 @@ export class ContainerInfo implements OnInit, AfterViewInit {
   table2?: any
   pageLength = 50
 
-
-  // alphabet = "abcdefghijklmnopqrstuvwxyz";
-  type_list: string[] = [];
-
-  form_container_type?: string = '_default'
-  form_container_no?: string
-  form_memo?: string
+  _selectedRowData:any = {}
 
   @ViewChild('table') tableRef!: ElementRef
   @ViewChild('table2') table2Ref!: ElementRef
 
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert,private cdf: ChangeDetectorRef, private router: Router, private containerService: ContainerService, private containerTypeService: ContainerTypeService) {
+  constructor(
+    @Inject(IAlertToken) private _IAlert: IAlert, 
+    private containerService: ContainerService) {
 
-    containerTypeService.getList().then(res => {
-      if (res.data){
-        this.type_list = res.data.map(item => item.container_type)
-        cdf.detectChanges()
-      }
-    })
   }
 
   ngOnInit(): void {
@@ -47,13 +37,21 @@ export class ContainerInfo implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.init_table()
-    this.init_table2()
-    this.fetchData()
+    this.initTable()
+    this.initTable2()
     this.clickEvent()
   }
 
-  init_table() {
+  initTable() {
+    this.setTableOption()
+    this.fetchTableData()
+  }
+
+  initTable2() {
+    this.setTable2Option()
+  }
+
+  setTableOption(){
     let self = this
     
     this.table = $(this.tableRef.nativeElement).DataTable({
@@ -74,13 +72,6 @@ export class ContainerInfo implements OnInit, AfterViewInit {
       ],
       order: [[1, 'asc']], // order 
       columns: [
-        // {
-        //   defaultContent: '', title: '', className: 'text-center actions', width: 75,
-        //   "createdCell": function (td: any, cellData: any, rowData: any, rowIndex: any, colIndex: any) {
-        //     let menu = self.createInlineDropDownMenu(rowData)
-        //     $(td).append(menu)
-        //   },
-        // },
         { 
           data: 'container_code', title: '載具編號',
           render: function (data: any, type: any, row: any, meta: any) {
@@ -103,7 +94,11 @@ export class ContainerInfo implements OnInit, AfterViewInit {
     })
   }
 
-  init_table2() {
+  
+
+  
+
+  setTable2Option(){
     let self = this
     
     this.table2 = $(this.table2Ref.nativeElement).DataTable({
@@ -124,17 +119,10 @@ export class ContainerInfo implements OnInit, AfterViewInit {
       ],
       order: [[1, 'asc']], // order 
       columns: [
-        {
-          defaultContent: '', title: '', className: 'text-center actions', width: 75,
-          "createdCell": function (td: any, cellData: any, rowData: any, rowIndex: any, colIndex: any) {
-            let menu = self.createInlineDropDownMenu(rowData)
-            $(td).append(menu)
-          },
-        },
-        { data: 'container_type', title: '製造批號' },
-        { data: 'container_type_name', title: '布疋號' },
-        { data: 'container_no', title: '數量', className:'text-right' },
-        { data: 'memo', title: '儲格' },
+        { data: 'RVBS04', title: '製造批號' },
+        { data: 'TA_RVBS14', title: '布疋號' },
+        { data: 'count', title: '數量', className:'text-right' },
+        { data: 'ime02', title: '儲格' },
       ],
       initComplete: function (settings: any, json: any) { },
       language: {
@@ -144,144 +132,65 @@ export class ContainerInfo implements OnInit, AfterViewInit {
     })
   }
 
-  /**
-   * for table action
-   * @returns jquery Element
-   */
-  createInlineDropDownMenu(rowData: any){
-    let listHtml = `<div class="dropdown no-arrow">
-                     <a class="dropdown-toggle dropdown_actions" href="#" role="button"
-                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <i class="dropdown_icon fas fa-ellipsis-h fa-fw "></i>
-                     </a>
-                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
-                     </div>
-                 </div>`
+  
 
-    let $list = $(listHtml)
-    
-    let itemHtml
-    itemHtml = `<a class="dropdown-item dropdown-item-editing" role="button">
-                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                             修改
-                         </a>`
-    
-    $list.find('.dropdown-menu').append($(itemHtml))
 
-    itemHtml = `<a class="dropdown-item dropdown-item-delete" role="button">
-                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                             刪除
-                         </a>`
-    
-    $list.find('.dropdown-menu').append($(itemHtml))
+  fetchTableData() {
+    this.containerService.getList().then(res => {
+      if (res.succ){
+        this.table.rows.add(res.data).draw()
+      } else {
 
-    return $list
+      }
+    })
   }
 
-  fetchData() {
+
+
+  fetchTable2Data() {
+    let container = this._selectedRowData.container_type + this._selectedRowData.container_no
+    this.containerService.getImgsInfoList(container).then(data => {
+      if (data.length){
+        this.table2.rows.add(data).draw()
+      } 
+    })
+  }
+
+  clearTable() {
     this.table.clear().draw()
-
-    // this.containerService.getList().then((data: any) => {
-    //   if (data.length === 0) {
-    //     // alert('沒有資料')
-    //   } else {
-    //     this.table.rows.add(data).draw()
-    //   }
-    // })
   }
 
-  add(){
-    if (StringUtil.IsWhiteOrSpace(this.form_container_type) || StringUtil.IsWhiteOrSpace(this.form_container_no)){
-      this._IAlert.AlertWarn('請輸入載體代號和名稱')
-    }
-    else{
-      let data = new ContainerModel()
-      data.container_type = this.form_container_type!
-      data.container_no = this.form_container_no!
-      data.memo = this.form_memo
-
-      this.containerService.add(data).then(res => {
-        if (res.succ){
-          this._IAlert.AlertSucc('新增成功')
-          this.fetchData()
-          this.clearForm()
-        }
-        else{
-          this._IAlert.AlertError(res.message)
-        }
-      })
-    }
+  clearTable2Data() {
+    this.table2.clear().draw()
   }
 
-  startEditing(rowData: any){
-    this.form_container_type = rowData.container_type
-    this.form_container_no = rowData.container_no
-    this.form_memo = rowData.memo
-
+  refreshTableData() {
+    this.clearTable()
+    this.fetchTableData()
   }
 
-  update(){
-    this._IAlert.ConfirmWarn('確認要修改嗎?', () => {
-      let data = new ContainerModel()
-      data.container_type = this.form_container_type!
-      data.container_no = this.form_container_no!
-      data.memo = this.form_memo
-
-      this.containerService.update(data).then(res => {
-        if (res.succ){
-          this._IAlert.AlertSucc('修改成功')
-          this.fetchData()
-          this.clearForm()
-        } else {
-          this._IAlert.AlertError(res.message)
-        }
-      })
-    })
-  }
-
-  delete(container_type: string, container_no: string){
-    this._IAlert.ConfirmWarn('確認要刪除嗎?', () => {
-      this.containerService.delete(container_type, container_no).then(res => {
-        if (res){
-          this._IAlert.AlertSucc('刪除成功')
-          this.fetchData()
-        } else{
-          this._IAlert.AlertError('刪除失敗')
-        }
-      })
-    })
+  refreshTable2Data() {
+    this.clearTable2Data()
+    this.fetchTable2Data()
   }
 
   clickEvent() {
     let self = this
 
-    $(this.tableRef.nativeElement).on('click', '.dropdown-item-editing', function (this: any, e: any) {
+    $(this.tableRef.nativeElement).on('click', 'tr', function (this: any, e: any) {
       let tr = $(this).closest('tr')
       var row = self.table.row(tr)
       var rowData = row.data()
 
-      //
-      // self.router.navigateByUrl(`/admin/role/${rowData.role_code}/permission`)
-      self.startEditing(rowData)
+      self._selectedRowData = rowData
+      self.refreshTable2Data()
+
+      $(this).parent().find('tr').removeClass('tr-active')
+      $(this).addClass('tr-active')
     })
 
-    $(this.tableRef.nativeElement).on('click', '.dropdown-item-delete', function (this: any, e: any) {
-      let tr = $(this).closest('tr')
-      var row = self.table.row(tr)
-      var rowData = row.data()
-
-      //
-      // self.router.navigateByUrl(`/admin/role/${rowData.role_code}/permission`)
-      self.delete(rowData.container_type, row.container_no)
-    })
   }
 
 
-  clearForm(){
-    this.form_container_type = '_default'
-    this.form_container_no = ''
-    this.form_memo = ''
-  }
 
 }

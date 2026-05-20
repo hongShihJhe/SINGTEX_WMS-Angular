@@ -1,3 +1,7 @@
+
+/**
+ * 批號庫存明細檔
+ */
 export class IMGS_FILE {
     /**
      * 料號

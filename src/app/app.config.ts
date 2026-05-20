@@ -13,7 +13,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    SweetAlert2Util,
-    {provide: IAlertToken, useExisting: SweetAlert2Util}
+    // SweetAlert2Util,
+    // {provide: IAlertToken, useExisting: SweetAlert2Util},
+    {provide: IAlertToken, useClass: SweetAlert2Util}
   ]
 };

@@ -22,6 +22,7 @@ export class User implements OnInit, AfterViewInit {
   selectRoleOptions: any[] = [{ value: '_all', text: 'all' }]
 
   _all_table_data?: any
+  
   get table_data(): any[] {
     if (this.table) {
       return this.table.rows().data().toArray()
@@ -100,6 +101,7 @@ export class User implements OnInit, AfterViewInit {
           },
         },
         { data: 'account', title: '帳號', orderable: true },
+        { data: 'password', title: '密碼', orderable: true },
         { data: 'role_code', title: '角色', orderable: true },
       ],
       initComplete: function (settings: any, json: any) { },

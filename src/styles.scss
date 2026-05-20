@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+//---前台
 .menu-item {
     background-color: #2196f3;
     color: white;
@@ -72,8 +75,15 @@
     }
 }
 
+
+//---後台
 .admin-content {
     .table-click tr:hover {
         cursor: pointer;
     }
+
+    .tr-active {
+        background-color: #eaecf4;
+    }
 }
+

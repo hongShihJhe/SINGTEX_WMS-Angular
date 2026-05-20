@@ -1,7 +1,7 @@
 export class SubmitResult {
     succ = true
     code?: string
-    message = ''
+    message?: string 
 }
 
 export class SubmitResultWithData<T> extends SubmitResult {

@@ -2,7 +2,7 @@ import { ContainerService } from './container-service';
 import { AuthService } from './auth-service';
 import { Cimt302aApi } from '../@data/cimt302a-api';
 import { Injectable } from '@angular/core';
-import { Cimt302aView } from '../@models/Cimt302aView';
+import { Cimt302a } from '../@models/Cimt302a';
 import { ContainerImgs } from '../@models/ContainerImgs';
 
 @Injectable({
@@ -17,7 +17,11 @@ export class Cimt302a0Service {
     return this.cimt302aApi.getListByINB01(inb01)
   }
 
-  submit(data: Cimt302aView[]) {
+  checkContainerExists(container: string){
+    return this.containerService.checkExistsByCode(container)
+  }
+
+  submit(data: Cimt302a[]) {
     data.forEach((row, idx) => {
       // view col
       delete row._confirm

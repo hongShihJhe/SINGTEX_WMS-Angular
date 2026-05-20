@@ -1,7 +1,7 @@
 import { SubmitResult } from "./SubmitResult"
 
 /**
- * 
+ * 責任鏈模式，如果檢查成功資料交給下個檢查物件，檢查失敗則返回結果
  */
 export class checkHandler<T>{
     protected next?: checkHandler<T>

@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ContainerTypeService } from '../../@services/container-type-service';
 import { ContainerType as ContainerTypeModel } from '../../@models/ContainerType';
 import { IAlertToken, IAlert } from '../../@interfaces/IAlert';
-import { FormOpFailState } from '../../@models/FormOpFailState';
 import { SubmitResult, SubmitResultWithData } from '../../@models/SubmitResult';
 import { ContainerTypeValidatorCodes } from '../../@validators/ContainerTypeValidatorCodes';
-import { BaseViewComponent } from '../../@models/BaseViewComponent';
+import { BaseFormCRUDComponent } from '../../@models/BaseFormCRUDComponent';
 
 
 @Component({
@@ -19,7 +18,7 @@ import { BaseViewComponent } from '../../@models/BaseViewComponent';
   providers: []
 })
 
-export class ContainerType extends BaseViewComponent implements OnInit, AfterViewInit {
+export class ContainerType extends BaseFormCRUDComponent implements OnInit, AfterViewInit {
   alphabets_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   form_container_type?: string = ''
@@ -215,12 +214,12 @@ export class ContainerType extends BaseViewComponent implements OnInit, AfterVie
     this.table.rows.add(rowData).draw()
   }
 
-  clearTableData() {
+  clearTable() {
     this.table.clear().draw()
   }
 
   refreshTableData() {
-    this.clearTableData()
+    this.clearTable()
     this.fetchTableData()
   }
 

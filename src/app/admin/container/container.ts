@@ -9,7 +9,7 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { FormOpSuccState } from '../../@models/FormOpSuccState';
 import { FormOpFailState } from '../../@models/FormOpFailState';
 import { SubmitResult, SubmitResultWithData } from '../../@models/SubmitResult';
-import { BaseViewComponent } from '../../@models/BaseViewComponent';
+import { BaseFormCRUDComponent } from '../../@models/BaseFormCRUDComponent';
 import { ContainerValidatorCodes } from '../../@validators/ContainerValidatorCodes';
 import { ContainerTypeValidatorCodes } from '../../@validators/ContainerTypeValidatorCodes';
 
@@ -22,7 +22,7 @@ import { ContainerTypeValidatorCodes } from '../../@validators/ContainerTypeVali
   styleUrl: './container.scss',
 })
 
-export class Container extends BaseViewComponent implements OnInit, AfterViewInit {
+export class Container extends BaseFormCRUDComponent implements OnInit, AfterViewInit {
   table?: any
   pageLength = 50
 
@@ -33,7 +33,7 @@ export class Container extends BaseViewComponent implements OnInit, AfterViewIni
 
   @ViewChild('table') tableRef!: ElementRef
 
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cdf: ChangeDetectorRef, private router: Router, private containerService: ContainerService, private containerTypeService: ContainerTypeService) {
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private router: Router, private containerService: ContainerService, private containerTypeService: ContainerTypeService) {
     super()
   }
 
@@ -139,7 +139,6 @@ export class Container extends BaseViewComponent implements OnInit, AfterViewIni
     this.containerTypeService.getList().then(res => {
       if (res.data) {
         this.type_list = res.data?.map(item => item.container_type)
-        this.cdf.detectChanges()
       }
     })
   }
@@ -236,12 +235,12 @@ export class Container extends BaseViewComponent implements OnInit, AfterViewIni
     this.table.rows.add(rowData).draw()
   }
 
-  clearTableData() {
+  clearTable() {
     this.table.clear().draw()
   }
 
   refreshTableData() {
-    this.clearTableData()
+    this.clearTable()
     this.fetchTableData()
   }
 

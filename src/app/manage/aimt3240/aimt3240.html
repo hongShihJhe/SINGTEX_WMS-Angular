@@ -1,6 +1,6 @@
 <!-- btns-->
 <div style="text-align:center;position: relative;" class="mb-3">
-    <button (click)="scanModalShow()" type="button" class="btn btn-primary btn-lg">開始掃描</button>
+    <button (click)="this.scanImgsModal.show()" type="button" class="btn btn-primary btn-lg">開始掃描</button>
     @if (table_data_confimed.length > 0){
         <button (click)="submit()" type="button" class="btn btn-success btn-lg ml-2">確認調撥</button>
     }

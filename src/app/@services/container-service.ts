@@ -1,16 +1,18 @@
+import { ImgsFileService } from './imgs-file-service';
 import { ContainerValidator } from './../@validators/container-validator';
 import { ContainerImgsApi } from '../@data/container-imgs-api';
 import { Injectable } from '@angular/core';
 import { SubmitResult, SubmitResultWithData } from '../@models/SubmitResult';
 import { ContainerImgs } from '../@models/ContainerImgs';
-import { ContainerLocation } from '../@models/ContainerLocation';
 import { ContainerImgsInfo } from '../@models/ContainerImgsInfo';
 import { ContainerLocationApi } from '../@data/container-location-api';
 import { ContainerApi } from '../@data/container-api';
 import { Container } from '../@models/Container';
 import { ContainerTypeApi } from '../@data/container-type-api';
 import { ContainerValidatorCodes } from '../@validators/ContainerValidatorCodes';
-import { checkHandler } from '../@models/handler';
+import { checkHandler } from '../@models/checkHandler';
+import { StringUtil } from '../@utils/StringUtil';
+import { GlobalParams } from '../@models/GlobalParams';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +25,8 @@ export class ContainerService {
     private containerLocationService: ContainerLocationApi, 
     private containerApi: ContainerApi,
     private containerValidator: ContainerValidator,
-    private containerTypeApi: ContainerTypeApi) {
+    private containerTypeApi: ContainerTypeApi,
+    private imgsFileService: ImgsFileService) {
 
   }
 
@@ -37,16 +40,30 @@ export class ContainerService {
 
       let p1 = this.containerTypeApi.getList()
       let p2 = this.containerApi.getList()
-      Promise.all([p1, p2]).then(values => {
+      let p3 = this.containerLocationService.getList()
+      let p4 = this.containerImgsService.getImgListAll()
+      Promise.all([p1, p2, p3, p4]).then(values => {
         let container_type_list = values[0]
         let container_list = values[1]
+        let container_loc_list = values[2]
+        let container_imgs_list = values[3]
 
         let map = container_list.map(item => {
           let row: any = {}
+
+          let cotainer_code = item.container_type + item.container_no
+
+          let container_type = container_type_list.find(o => o.container_type == item.container_type)
+          let container_loc = ContainerLocationApi.getLocation(container_loc_list, cotainer_code)
+          let container_imgs = container_imgs_list.filter(o => o.container == cotainer_code)
+
           row.container_type = item.container_type
-          row.container_type_name = container_type_list.find(item => item.container_type == row.container_type)?.container_type_name
+          row.container_type_name = container_type?.container_type_name
           row.container_no = item.container_no
           row.memo = item.memo
+          row.ime01 = container_loc?.ime01
+          row.ime02 = container_loc?.ime02
+          row.container_imgs_count = container_imgs.length
 
           return row
         })
@@ -60,8 +77,43 @@ export class ContainerService {
     })
   }
 
+  checkExists(data: Container) {
+    return new Promise<boolean>((resolve, reject) => {
+      let result = new SubmitResult()
+      this.containerApi.checkExists(data.container_type, data.container_no).then(bool => {
+        resolve(bool)
+      })
+    })
+  }
 
-  validateAdd(data: Container) {
+  /**
+   * 
+   * @param container_code 
+   * @returns [container_type, container_no]
+   */
+  parseContainerCode(container_code: string){
+    if (StringUtil.IsNullOrWhiteSpace(container_code)){
+      return ['', '']
+    }
+
+    let container_type = container_code[0]
+    let container_no = container_code.slice(1)
+
+    return [container_type, container_no]
+  }
+
+  checkExistsByCode(container_code: string) {
+    return new Promise<boolean>((resolve, reject) => {
+      let result = new SubmitResult()
+      let parse = this.parseContainerCode(container_code)
+      this.containerApi.checkExists(parse[0], parse[1]).then(bool => {
+        resolve(bool)
+      })
+    })
+  }
+
+
+  private validateAdd(data: Container) {
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
 
@@ -76,7 +128,7 @@ export class ContainerService {
     })
   }
 
-  checkExistsWhenAdd(data: Container) {
+  private checkExistsWhenAdd(data: Container) {
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
       this.containerApi.checkExists(data.container_type, data.container_no).then(bool => {
@@ -113,7 +165,7 @@ export class ContainerService {
     return _validateAddHandler.handleFunc(data)
   }
 
-  validateUpdate(data: Container){
+  private validateUpdate(data: Container){
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
 
@@ -128,7 +180,7 @@ export class ContainerService {
     })
   }
 
-  checkExistsWhenUpdate(data: Container) {
+  private checkExistsWhenUpdate(data: Container) {
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
       this.containerApi.checkExists(data.container_type, data.container_no).then(bool => {
@@ -194,6 +246,36 @@ export class ContainerService {
     return this.containerImgsService.getImgsList(container)
   }
 
+  getImgsInfoList(container: string) {
+    return new Promise<any[]>((resolve, reject) => {
+      let result: any[] = []
+
+      let p1 = this.containerImgsService.getImgsList(container)
+      let p2 = this.imgsFileService.getList()
+
+      Promise.all([p1, p2]).then(values => {
+        let imgs_list = values[0]
+        let imgs_file_list = values[1]
+
+        let map = imgs_list.map(container_imgs => {
+          var row: any = {}
+
+          let imgs_file = imgs_file_list.find(o => o.IMGS06 == container_imgs.RVBS04)
+
+          row.RVBS04 = container_imgs.RVBS04
+          row.TA_RVBS14 = container_imgs.TA_RVBS14
+          row.ime02 = imgs_file?.IMGS03
+
+          return row
+        })
+
+        resolve(map)
+      })
+
+      
+    })
+  }
+
   getLocation(container: string) {
     return this.containerLocationService.getLocation(container)
   }
@@ -209,7 +291,7 @@ export class ContainerService {
           result.TA_RVBS14 = imgs.TA_RVBS14
           this.getLocation(imgs.container).then(loc => {
             if (loc) {
-              result.container_IMGS03 = loc?.IMGS03
+              result.container_IMGS03 = loc?.ime02
             }
 
             resolve(result)
@@ -234,7 +316,7 @@ export class ContainerService {
           result.TA_RVBS14 = imgs.TA_RVBS14
           this.getLocation(imgs.container).then(loc => {
             if (loc) {
-              result.container_IMGS03 = loc?.IMGS03
+              result.container_IMGS03 = loc?.ime02
             }
 
             resolve(result)
@@ -247,18 +329,17 @@ export class ContainerService {
     })
   }
 
-  updateIMGS03(container: string, imgs03: string) {
-    return this.containerLocationService.updateIMGS03(container, imgs03)
+  updateIME02(container: string, ime02: string) {
+    return this.containerLocationService.updateIMGS03(container, GlobalParams.warehouse, ime02)
   }
 
   updateContainerImgs(data: ContainerImgs[]){
     return this.containerImgsService.update(data)
   }
 
-  changeContainer(from_container:string, to_container:string){
+  moveImgs(from_container:string, to_container:string){
     return this.containerImgsService.changeContainer(from_container, to_container)
   }
-
 
   
 }

@@ -2,14 +2,13 @@
 <div class="mb-2">
     <div class="form">
         <div class="form-group">
-            <button (click)="A01ModalShow()" type="button" class="btn btn-primary">掃描載體</button>
+            <button (click)="this.A01Modal.show()" type="button" class="btn btn-primary">掃描載體</button>
             <label class="control-label">載體:</label>
             <span>{{inputA01}}</span>
-            @if (container_imgs03){
-            <label class="control-label ml-2">載體儲位:</label>
-            <span>{{container_imgs03}}</span>
+            @if (inputA01){
+                <label class="control-label ml-2">儲位:</label>
+                <span>{{container_ime02}}</span>
             }
-
         </div>
     </div>
 </div>

@@ -1,8 +1,10 @@
+import { Aimt3243Service } from './../../@services/aimt3243-service';
 import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
 
 @Component({
   standalone: true,
@@ -12,59 +14,24 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
   styleUrl: './aimt3243.scss',
 })
 
-export class Aimt3243 implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
+export class Aimt3243 extends BasePDAComponent implements OnInit, AfterViewInit {
+
   inputA01?: string
   inputA02?: string
-  container_imgs03?: string
+  current_ime02?: string
 
   @ViewChild('table') tableRef!: ElementRef
 
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-
-  get scanned_count() {
-    if (this.table) {
-      return this.table.rows((idx: any, data: any) => data._confirm === 'Y').count()
-    }
-    return 0
-  }
-
-  get scan_completed() {
-    if (!this.table) {
-      return null
-    }
-    if (this.rows_count > 0) {
-      let hasNotConfirmedData = this.table.row((idx: any, data: any) => data._confirm !== 'Y').data()
-      return !hasNotConfirmedData
-    }
-    return false
-  }
-
-  get table_data(): any[] {
-    if (this.table) {
-      return this.table.rows().data().toArray()
-    }
-    return []
-  }
-
-  get table_data_confimed() {
-    return this.table_data.filter((item: any) => item._confirm === 'Y')
-  }
 
   @ViewChild('A01Modal') A01Modal!: ScanModal
   @ViewChild('A02Modal') A02Modal!: ScanModal
 
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private containerService: ContainerService) {
-
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private aimt3243Service: Aimt3243Service) {
+    super()
   }
 
   ngOnInit(): void {
+
   }
 
   ngAfterViewInit(): void {
@@ -73,7 +40,8 @@ export class Aimt3243 implements OnInit, AfterViewInit {
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+
+    let options = {
       processing: true,
       searching: false,
       serverSide: false,
@@ -86,9 +54,6 @@ export class Aimt3243 implements OnInit, AfterViewInit {
       //     d.A01 = self.inputA01
       //   }
       // },
-      columnDefs: [
-        { targets: '_all', orderable: false, defaultContent: '' },
-      ],
       order: [], // order 
       columns: [
         {
@@ -108,13 +73,13 @@ export class Aimt3243 implements OnInit, AfterViewInit {
           data: '', 'title': '製造批號<br />布疋號',
           render: function (data: any, type: any, row: any, meta: any) {
             var arr = []
-            arr.push(row['TA_RVBS14'])
             arr.push(row['RVBS04'])
+            arr.push(row['TA_RVBS14'])
             return arr.join('<br />')
           }
         },
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (this:any, settings: any) {
         var api = this.api();
 
         api.rows().every(function (this: any) {
@@ -125,16 +90,16 @@ export class Aimt3243 implements OnInit, AfterViewInit {
           if (rowData._confirm === 'Y') {
             $(rowNode).addClass('scanned')
           }
+
           row.invalidate(); // invalidate the data DataTables has cached for this row
         });
       },
       initComplete: function (settings: any, json: any) { },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    }
+
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
+
 
   A01ModalShow() {
     this.A01Modal.show()
@@ -144,31 +109,37 @@ export class Aimt3243 implements OnInit, AfterViewInit {
     this.A02Modal.show()
   }
 
-
   A01ModalConfirm(value: string) {
     if (!value || !value.trim()) {
       return
     }
-    this.inputA01 = value
 
-    this.containerService.getLocation(value).then(loc => {
-      this.container_imgs03 = loc?.IMGS03
-    })
+    let container = value
 
-    this.fetchData(value)
-  }
-
-  fetchData(value: string) {
-    this.table.clear().draw()
-    this.containerService.getImgsList(value).then(imgsList => {
-      if (imgsList.length === 0) {
-        // SweetAlert2Helper.Alert(`沒有資料`)
+    this.aimt3243Service.checkContainerExistsAndGetIME02(container).then(res => {
+      if (!res.succ){
+        this._IAlert.AlertError(`載體 ${value} 不存在`)
       } else {
-        this.table.rows.add(imgsList).draw()
+        this.inputA01 = container
+        this.current_ime02 = res.data
+        this.refreshTable()
       }
     })
-
   }
+
+  override fetchTableData() {
+    let container = this.inputA01
+    if (container){
+        this.aimt3243Service.fetchTableData(container).then(imgsList => {
+        if (imgsList.length === 0) {
+
+        } else {
+          this.addTableRow(imgsList)
+        }
+      })
+    }
+  }
+
 
   A02ModalConfirm(value: string) {
     if (!value || !value.trim()) {
@@ -177,18 +148,17 @@ export class Aimt3243 implements OnInit, AfterViewInit {
     this.inputA02 = value
   }
 
-
-
   submit() {
     this._IAlert.Confirm('確認要綁定嗎?', () => {
       if (!this.inputA01 || !this.inputA02) {
         this._IAlert.Alert('請輸入載體和儲位')
         return
       }
-      this.containerService.updateIMGS03(this.inputA01, this.inputA02).then(result => {
+      this.aimt3243Service.submit(this.inputA01, this.inputA02).then(result => {
         if (result.succ) {
           this._IAlert.AlertSucc('載體綁定成功', () => {
-            this.clear()
+            this.clearForm()
+            this.clearTable()
           })
         } else {
           this._IAlert.AlertError(result.message)
@@ -197,11 +167,10 @@ export class Aimt3243 implements OnInit, AfterViewInit {
     })
   }
 
-  clear() {
+  clearForm(){
     this.inputA01 = ''
     this.inputA02 = ''
-    this.container_imgs03 = ''
-    this.table.clear().draw()
+    this.current_ime02 = ''
   }
 
 }

@@ -1,9 +1,11 @@
+import { ContainerService } from './../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { Cimt302a0Service } from '../../@services/cimt302a0-service';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
 
 @Component({
   standalone: true,
@@ -13,42 +15,9 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
   styleUrl: './cimt302a0.scss',
 })
 
-export class Cimt302a0 implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
+export class Cimt302a0 extends BasePDAComponent implements OnInit, AfterViewInit {
   inputA01?: string
   inputA02?: string
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-  get scanned_count() {
-    if (this.table) {
-      return this.table.rows((idx: any, data: any) => data._confirm === 'Y').count()
-    }
-    return 0
-  }
-  get scan_completed() {
-    if (!this.table) {
-      return null
-    }
-    if (this.rows_count > 0) {
-      let hasNotConfirmedData = this.table.row((idx: any, data: any) => data._confirm !== 'Y').data()
-      return !hasNotConfirmedData
-    }
-    return false
-  }
-  get table_data(): any[] {
-    if (this.table) {
-      return this.table.rows().data().toArray()
-    }
-    return []
-  }
-  get table_data_confimed() {
-    return this.table_data.filter((item: any) => item._confirm === 'Y')
-  }
 
   @ViewChild('table') tableRef!: ElementRef
   @ViewChild('A01Modal') A01Modal!: ScanModal
@@ -56,7 +25,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
   @ViewChild('scanModal') scanModal!: ScanModal
 
   constructor(@Inject(IAlertToken) private _IAlert: IAlert, private cimt302a0Service: Cimt302a0Service) {
-
+    super()
   }
 
   ngOnInit(): void {
@@ -69,7 +38,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+    let options = {
       processing: true,
       searching: false,
       serverSide: false,
@@ -122,7 +91,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
           }
         },
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (this:any, settings: any) {
         var api = this.api();
         api.rows().every(function (this: any) {
           var row = this
@@ -137,50 +106,44 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
 
       },
       initComplete: function (settings: any, json: any) { },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    }
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
 
-  A01ModalShow() {
-    this.A01Modal.show()
-  }
-
-  A02ModalShow() {
-    this.A02Modal.show()
-  }
-
-  scanModalShow() {
-    this.scanModal.show()
-  }
 
   A01ModalConfirm(value: string) {
     if (!value || !value.trim()) {
       return
     }
     this.inputA01 = value
-    this.fetchData(value)
+    this.refreshTable()
   }
 
-  fetchData(inb01: string) {
-    this.table.clear().draw()
-
-    this.cimt302a0Service.getList(inb01).then(data => {
-      if (data.length === 0) {
-        alert('沒有資料')
-      } else {
-        this.table.rows.add(data).draw()
-      }
-    })
+  override fetchTableData() {
+    let inb01 = this.inputA01
+    if (inb01){
+      this.cimt302a0Service.getList(inb01).then(data => {
+        if (data.length === 0) {
+          this._IAlert.Alert('沒有資料')
+        } else {
+          this.table.rows.add(data).draw()
+        }
+      })
+    }
   }
 
   A02ModalConfirm(value: string) {
     if (!value || !value.trim()) {
       return
     }
-    this.inputA02 = value
+    
+    this.cimt302a0Service.checkContainerExists(value).then(bool => {
+      if (!bool){
+        this._IAlert.AlertError(`載體 ${value} 不存在`)
+      } else {
+        this.inputA02 = value
+      }
+    })
   }
 
   scanModalConfirm(value: string) {
@@ -202,7 +165,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
     // update 
     rowData._confirm = 'Y'
     rowData.container = this.inputA02
-    row.data(rowData).draw()
+    this.updateTableRow(row, rowData)
 
     // keep scan
     if (!this.scan_completed) {
@@ -233,7 +196,7 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
     let rowData = row.data()
     rowData._confirm = ''
     rowData.container = ''
-    row.data(rowData).draw()
+    this.updateTableRow(row, rowData)
 
     let node = row.node()
     $(node).removeClass('scanned')
@@ -241,10 +204,12 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
 
   submit() {
     this._IAlert.Confirm('確認要點收嗎?', () => {
-      this.cimt302a0Service.submit(this.table_data_confimed).then(result => {
+      let data = this.table_data_confimed
+      this.cimt302a0Service.submit(data).then(result => {
         if (result.succ) {
           this._IAlert.AlertSucc('點收成功', () => {
-            this.clear()
+            this.clearForm()
+            this.clearTable()
           })
         } else {
           this._IAlert.AlertError(result.message)
@@ -253,10 +218,9 @@ export class Cimt302a0 implements OnInit, AfterViewInit {
     })
   }
 
-  clear() {
+  clearForm() {
     this.inputA01 = ''
     this.inputA02 = ''
-    this.table.clear().draw()
   }
 
 }

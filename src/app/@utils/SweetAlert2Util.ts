@@ -1,5 +1,10 @@
 import Swal, { SweetAlertOptions } from "sweetalert2";
 import { IAlert } from "../@interfaces/IAlert";
+import { Injectable } from "@angular/core";
+
+@Injectable({
+  providedIn: 'root'
+})
 
 export class SweetAlert2Util implements IAlert {
     Alert(message: string, callback?: Function): void {

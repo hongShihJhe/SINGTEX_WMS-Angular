@@ -1,4 +1,4 @@
-import { breadcrumb_item } from '../../@models/breadcrumb_item';
+import { breadcrumbItem } from '../../@models/breadcrumbItem';
 import { AuthService } from '../../@services/auth-service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -21,8 +21,8 @@ export class ManageHeader implements OnInit, OnDestroy {
   subscription?: Subscription;
 
 
-  breadcrumbList_default: breadcrumb_item[] = [ new breadcrumb_item('/manage', '主選單') ]
-  breadcrumbList: breadcrumb_item[] = [...this.breadcrumbList_default]
+  breadcrumbList_default: breadcrumbItem[] = [ new breadcrumbItem('/manage', '主選單') ]
+  breadcrumbList: breadcrumbItem[] = [...this.breadcrumbList_default]
 
   constructor(
     private router: Router, 

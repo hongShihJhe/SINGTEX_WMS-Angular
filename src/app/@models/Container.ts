@@ -5,4 +5,6 @@ export class Container {
     container_type = ''
     container_no = ''
     memo?: string
+
+
 }

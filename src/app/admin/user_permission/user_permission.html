@@ -2,8 +2,8 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/admin/user">帳號管理</a></li>
-        <li class="breadcrumb-item active" aria-current="page">帳號權限</li>
+        <li class="breadcrumb-item"><a routerLink="/admin/user">使用者管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">使用者權限</li>
     </ol>
 </nav>
 
@@ -17,8 +17,14 @@
             <label class="control-label">角色: </label>
             <span class="ml-1">{{this.role_code}}</span>
         </div>
+        <div>
+            <span>初始尚未設定時帶入角色權限</span>
+        </div>
     </div>
+    
 </div>
+
+
 
 <div class="mb-2">
     <button class="btn btn-primary mr-2" (click)="enabledAll()">全部開啟</button>
@@ -26,9 +32,7 @@
     <button class="btn btn-primary" (click)="reset()">重置</button>
 </div>
 
-<div>
-    <span>初始尚未設定時帶入角色權限</span>
-</div>
+
 
 <div class="card shadow mb-4">
     <div class="card-body">

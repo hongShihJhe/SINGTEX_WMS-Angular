@@ -1,9 +1,7 @@
-import { DatePipe } from '@angular/common';
 import { Renderer2, Component, OnInit, signal, Inject, DOCUMENT } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProgressBar } from "./@shared/progress-bar/progress-bar";
-import { AlertStatic } from './@models/AlertStatic';
-import { SweetAlert2Util } from './@utils/SweetAlert2Util';
+
 
 @Component({
   selector: 'app-root',
@@ -21,9 +19,7 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    
-    AlertStatic.setObject(new SweetAlert2Util())
-
+    // AlertStatic.setObject(new SweetAlert2Util())
   }
 
   // loadScripts() {

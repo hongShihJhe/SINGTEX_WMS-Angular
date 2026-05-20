@@ -1,4 +1,4 @@
-export class Cimt302aView {
+export class Cimt302a {
     _confirm?:string
     INB01 = ''
     TA_RVBS14 = ''

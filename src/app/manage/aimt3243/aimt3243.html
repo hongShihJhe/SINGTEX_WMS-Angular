@@ -5,10 +5,6 @@
             <button (click)="A01ModalShow()" type="button" class="btn btn-primary">掃描載體</button>
             <label class="control-label">來源載體:</label>
             <span>{{inputA01}}</span>
-            @if (container_imgs03){
-            <label class="control-label ml-2">載體儲位:</label>
-            <span>{{container_imgs03}}</span>
-            }
 
             <div style="margin-left:auto">
                 <span>{{scanned_count}}</span>
@@ -17,8 +13,13 @@
             </div>
         </div>
         <div class="form-group">
+            <button type="button" class="btn btn-primary invisible"></button>
+            <label class="control-label">目前儲位:</label>
+            <span>{{current_ime02}}</span>
+        </div>
+        <div class="form-group">
             <button (click)="A02ModalShow()" type="button" class="btn btn-primary">掃描儲位</button>
-            <label class="control-label">目的儲位:</label>
+            <label class="control-label">變更儲位:</label>
             <span>{{inputA02}}</span>
         </div>
     </div>

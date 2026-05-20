@@ -25,35 +25,46 @@ export class ImgsFileService {
     }
   }
 
-  getImgsFile(imgs06: string) {
+  getList(){
+    return new Promise<IMGS_FILE[]>((resolve, reject) => {
+      resolve(this._data)
+    })
+  }
+
+  get(imgs06: string) {
     return new Promise<IMGS_FILE | undefined>((resolve, reject) => {
       resolve(this._data.find(item => item.IMGS06 === imgs06))
     })
   }
 
-  getImgsFileByList(imgs06List: string[]) {
-    return new Promise<(IMGS_FILE | undefined)[]>((resolve, reject) => {
-      let data = this._data.filter(item => imgs06List.includes(item.IMGS06))
-      let result = imgs06List.map(item => data.find(o => o.IMGS06 == item))
-      resolve(result)
-    })
-  }
+
+  // getByList(imgs06List: string[]) {
+  //   return new Promise<(IMGS_FILE | undefined)[]>((resolve, reject) => {
+  //     let data = this._data.filter(item => imgs06List.includes(item.IMGS06))
+  //     let result = imgs06List.map(item => data.find(o => o.IMGS06 == item))
+  //     resolve(result)
+  //   })
+  // }
 
   transfer(data: TransferItem[]) {
-    return new Promise((resolve, reject) => {
-      let _data = this._data
+    return new Promise<true>((resolve, reject) => {
+      setTimeout(() => {
+        let map = data.map(item => {
+          let imgs_file = new IMGS_FILE()
 
-      for (let item of data) {
-        let find = _data.find(_item => _item.IMGS06 === item.RVBS04)
-        if (find) {
-          find.IMGS02 = GlobalParams.warehouse
-          find.IMGS03 = item.IMG03
-        }
-      }
+          imgs_file.IMGS06 = item.RVBS04
+          imgs_file.IMGS02 = GlobalParams.warehouse
+          imgs_file.IMGS03 = item.IMG03
+          return imgs_file
+        })
 
-      this.update(_data)
 
-      resolve(true)
+        this.update(map)
+
+        resolve(true)
+
+      }, 500)
+      
     })
   }
 

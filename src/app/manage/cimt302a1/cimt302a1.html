@@ -2,7 +2,7 @@
 <div class="mb-2">
     <div class="form">
         <div class="form-group">
-            <button (click)="A01ModalShow()" type="button" class="btn btn-primary">掃描載體</button>
+            <button (click)="this.A01Modal.show()" type="button" class="btn btn-primary">掃描載體</button>
             <label class="control-label">載體:</label>
             <span>{{inputA01}}</span>
 
@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button (click)="A02ModalShow()" type="button" class="btn btn-primary">掃描儲位</button>
+            <button (click)="this.A02Modal.show()" type="button" class="btn btn-primary">掃描儲位</button>
             <label class="control-label">儲位:</label>
             <span>{{inputA02}}</span>
         </div>

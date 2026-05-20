@@ -2,7 +2,7 @@ import { Cimt302aApi } from '../@data/cimt302a-api';
 import { AuthService } from './auth-service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Cimt302aView } from '../@models/Cimt302aView';
+import { Cimt302a } from '../@models/Cimt302a';
 import { PlatformLocation } from '@angular/common';
 
 

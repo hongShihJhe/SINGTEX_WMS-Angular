@@ -15,7 +15,7 @@ export class ContainerValidator {
 
   validateAdd(data: Container){
     var result = new ValidateResult()
-    if (StringUtil.IsWhiteOrSpace(data.container_type) || StringUtil.IsWhiteOrSpace(data.container_no)){
+    if (StringUtil.IsNullOrWhiteSpace(data.container_type) || StringUtil.IsNullOrWhiteSpace(data.container_no)){
       result.succ = false
       result.code = ContainerValidatorCodes.M000
       result.message = 'container_type or container_type_name is null or whitespace'
@@ -47,7 +47,7 @@ export class ContainerValidator {
   validateUpdate(data: Container){
     var result = new ValidateResult()
     
-    if (StringUtil.IsWhiteOrSpace(data.container_type) || StringUtil.IsWhiteOrSpace(data.container_no)){
+    if (StringUtil.IsNullOrWhiteSpace(data.container_type) || StringUtil.IsNullOrWhiteSpace(data.container_no)){
       result.succ = false
       result.code = ContainerValidatorCodes.M000
       result.message = 'container_type or container_type_name is null or whitespace'

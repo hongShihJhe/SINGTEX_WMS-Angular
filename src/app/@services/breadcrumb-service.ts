@@ -1,4 +1,4 @@
-import { breadcrumb_item } from '../@models/breadcrumb_item';
+import { breadcrumbItem } from '../@models/breadcrumbItem';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -8,11 +8,11 @@ import { Subject } from 'rxjs';
 
 export class BreadcrumbService {
 
-  private breadcrumbSource = new Subject<breadcrumb_item[]>();
+  private breadcrumbSource = new Subject<breadcrumbItem[]>();
 
   breadcrumb$ = this.breadcrumbSource.asObservable()
 
-  push(data: breadcrumb_item[]){
+  push(data: breadcrumbItem[]){
     this.breadcrumbSource.next(data)
   }
 }

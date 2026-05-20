@@ -8,13 +8,14 @@ import { UserRole } from '../@models/UserRole';
 import { HttpClient } from '@angular/common/http';
 
 
-interface loginCallbackFunction {
-  (data: LoginResult): void
-}
+// interface loginCallbackFunction {
+//   (data: LoginResult): void
+// }
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class AuthService {
 
   readonly localStorage_key = 'jwt'
@@ -38,45 +39,40 @@ export class AuthService {
 
   }
 
-  login(account: string, password: string, succCallback?: loginCallbackFunction, failCallback?: loginCallbackFunction) {
-    this.http.get(this.base_href + 'login.json').subscribe((res: any) => {
-      var result = new LoginResult()
+  login(account: string, password: string) {
+    return new Promise<LoginResult>((resolve, reject) => {
+      this.http.get(this.base_href + 'login.json').subscribe((res: any) => {
+        var result = new LoginResult()
 
-      let data = res.data
+        let data = res.data
 
-      let find = data.find((item: any) => item.account === account && item.password === password)
-      if (find) {
-        result.succ = true
+        let find = data.find((item: any) => item.account === account && item.password === password)
+        if (find) {
+          result.succ = true
 
-        var userData = new LoggedInUserData()
-        userData.account = account
-        userData.expired_date = new Date((new Date().getTime() + this.exp_span_min * 60 * 1000))
+          var userData = new LoggedInUserData()
+          userData.account = account
+          userData.expired_date = new Date((new Date().getTime() + this.exp_span_min * 60 * 1000))
 
-        this.http.get(this.base_href + 'userRole.json').subscribe((res: any) => {
-          let userRoles = res.data.filter((role: any) => role.account === account) as UserRole[]
-          if (userRoles.length) {
-            userData.roles = userRoles.map(userRole => userRole.role_code)
-          }
+          this.http.get(this.base_href + 'userRole.json').subscribe((res: any) => {
+            let userRoles = res.data.filter((role: any) => role.account === account) as UserRole[]
+            if (userRoles.length) {
+              userData.roles = userRoles.map(userRole => userRole.role_code)
+            }
 
-          // save userData
-          localStorage.setItem(this.localStorage_key, JSON.stringify(userData))
+            // save userData
+            localStorage.setItem(this.localStorage_key, JSON.stringify(userData))
 
-          if (succCallback) {
-            succCallback(result)
-          }
-        })
-
-
-      } else {
-        result.succ = false
-        result.message = '帳號或密碼錯誤'
-
-        if (failCallback) {
-          failCallback(result)
+          })
+        } else {
+          result.succ = false
+          result.message = '帳號或密碼錯誤'
         }
-      }
-    })
 
+        resolve(result)
+
+      })
+    })
   }
 
   logout() {

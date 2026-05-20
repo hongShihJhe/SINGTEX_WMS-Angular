@@ -1,5 +1,5 @@
 export class StringUtil {
-    static IsWhiteOrSpace(str?: string){
+    static IsNullOrWhiteSpace(str?: string){
         return !str || !str.trim()
     }
 }

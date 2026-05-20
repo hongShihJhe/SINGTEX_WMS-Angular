@@ -31,8 +31,6 @@ export class FuncNames {
         "search": "查詢",
         "search_container": "載體查詢",
         "search_imgs": "製造批號或布疋號查詢",
-        "Search02": "工卡查詢",
-        "Search04": "載具使用紀錄",
         "csfi301": "工單登記",
     }
 

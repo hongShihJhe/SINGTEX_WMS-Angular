@@ -1,3 +1,4 @@
+import { Aimt3242Service } from './../../@services/aimt3242-service';
 import { ImgsFileService } from '../../@services/imgs-file-service';
 import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
@@ -6,6 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { ContainerImgsInfo } from '../../@models/ContainerImgsInfo';
 import { TransferItem } from '../../@models/TransferItem';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
+import { StringUtil } from '../../@utils/StringUtil';
+import { TransferService } from '../../@services/transfer-service';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
 
 @Component({
   standalone: true,
@@ -15,56 +19,16 @@ import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
   styleUrl: './aimt3242.scss',
 })
 
-export class Aimt3242 implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
+export class Aimt3242 extends BasePDAComponent implements OnInit, AfterViewInit {
   inputA01?: string
   inputA02?: string
-  container_imgs03?:string
 
   @ViewChild('table') tableRef!: ElementRef
-
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-
-  get scanned_count() {
-    if (this.table) {
-      return this.table.rows((idx: any, data: any) => data._confirm === 'Y').count()
-    }
-    return 0
-  }
-
-  get scan_completed() {
-    if (!this.table) {
-      return null
-    }
-    if (this.rows_count > 0) {
-      let hasNotConfirmedData = this.table.row((idx: any, data: any) => data._confirm !== 'Y').data()
-      return !hasNotConfirmedData
-    }
-    return false
-  }
-
-  get table_data(): any[] {
-    if (this.table) {
-      return this.table.rows().data().toArray()
-    }
-    return []
-  }
-
-  get table_data_confimed() {
-    return this.table_data.filter((item: any) => item._confirm === 'Y')
-  }
-
   @ViewChild('A01Modal') A01Modal!: ScanModal
   @ViewChild('A02Modal') A02Modal!: ScanModal
 
-  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private containerService: ContainerService, private imgsFileService: ImgsFileService) {
-
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private aimt3242Service:Aimt3242Service) {
+    super()
   }
 
   ngOnInit(): void {
@@ -76,7 +40,7 @@ export class Aimt3242 implements OnInit, AfterViewInit {
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+    let options = {
       processing: true,
       searching: false,
       serverSide: false,
@@ -119,7 +83,7 @@ export class Aimt3242 implements OnInit, AfterViewInit {
           }
         },
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (this:any, settings: any) {
         var api = this.api();
 
         api.rows().every(function (this: any) {
@@ -134,11 +98,9 @@ export class Aimt3242 implements OnInit, AfterViewInit {
         });
       },
       initComplete: function (settings: any, json: any) { },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    }
+
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
 
   A01ModalShow() {
@@ -149,41 +111,33 @@ export class Aimt3242 implements OnInit, AfterViewInit {
     this.A02Modal.show()
   }
 
-
   A01ModalConfirm(value: string) {
     if (!value || !value.trim()) {
       return
     }
-    this.inputA01 = value
 
-    this.containerService.getLocation(value).then(loc => {
-      this.container_imgs03 = loc?.IMGS03
+    let container = value
+    this.aimt3242Service.checkContainerExitst(value).then(bool => {
+      if (!bool){
+        this._IAlert.AlertError(`載體 ${value} 不存在`)
+      } else {
+        this.inputA01 = value
+        this.refreshTable()
+      }
     })
-
-    this.fetchData(value)
   }
 
-  fetchData(value: string) {
-    this.table.clear().draw()
-    this.containerService.getLocation(value).then(loc => {
-      this.containerService.getImgsList(value).then(imgsList => {
-        if (imgsList.length === 0) {
-          this._IAlert.Alert(`沒有資料`)
-        } else {
-          var map = imgsList.map(imgs => {
-            var row = new ContainerImgsInfo()
-            row.container = value
-            // row.IMGS03 = loc?.IMGS03 as string
-            row.RVBS04 = imgs.RVBS04
-            row.TA_RVBS14 = imgs.TA_RVBS14
-            return row
-          })
-
-          this.table.rows.add(map).draw()
-        }
+  override fetchTableData() {
+    let container = this.inputA01
+    if (container){
+      this.aimt3242Service.fetchTableData(container).then(data => {
+        if (!data.length) {
+            this._IAlert.Alert(`沒有資料`)
+          } else {
+            this.addTableRow(data)
+          }
       })
-    })
-
+    }
   }
 
   A02ModalConfirm(value: string) {
@@ -193,46 +147,40 @@ export class Aimt3242 implements OnInit, AfterViewInit {
     this.inputA02 = value
   }
 
-
-
   submit() {
     this._IAlert.Confirm('確認要載體移轉嗎?', () => {
-      if (!this.inputA01 || !this.inputA02) {
-        this._IAlert.Alert('請輸入載體和儲位')
+      if (StringUtil.IsNullOrWhiteSpace(this.inputA01) || StringUtil.IsNullOrWhiteSpace(this.inputA02)) {
+        this._IAlert.AlertWarn('請輸入載體和儲位')
         return
       }
 
-      let container = this.inputA01
-      let imgs03 = this.inputA02
-      
-      this.containerService.updateIMGS03(container, imgs03).then(result => {
-        if (result.succ) {
-          this._IAlert.AlertSucc('載體移轉成功', () => {
-            this.clear()
-          })
-        } else {
-          this._IAlert.AlertError(result.message)
-        }
-      })
+      let container = this.inputA01!
+      let ime02 = this.inputA02!
 
       let transferItems = this.table_data.map(row => {
-        let result = new TransferItem()
-        result.RVBS04 = row.RVBS04
-        result.TA_RVBS14 = row.TA_RVBS14
-        result.IMG03 = imgs03
-        return result
+        let item = new TransferItem()
+        item.RVBS04 = row.RVBS04
+        item.TA_RVBS14 = row.TA_RVBS14
+        item.IMG03 = ime02
+        return item
       })
 
-      this.imgsFileService.transfer(transferItems)
-
+      this.aimt3242Service.submit(transferItems, container, ime02).then(res => {
+        if (res.webServiceResult?.IsOk){
+          this._IAlert.AlertSucc('載體移轉成功', () => {
+            this.clearForm()
+            this.clearTable()
+          })
+        } else{
+          this._IAlert.AlertError(res.webServiceResult?.description)
+        }
+      })
     })
   }
 
-  clear() {
+  clearForm(){
     this.inputA01 = ''
     this.inputA02 = ''
-    this.container_imgs03 = ''
-    this.table.clear().draw()
   }
 
 }

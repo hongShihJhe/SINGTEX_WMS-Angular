@@ -1,4 +1,4 @@
-export class Aimt324View {
+export class Aimt324 {
     RVBS04 = ''
     TA_RVBS14 = ''
     IMGS01 = ''

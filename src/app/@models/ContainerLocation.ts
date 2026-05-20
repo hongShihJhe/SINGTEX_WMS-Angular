@@ -1,4 +1,15 @@
 export class ContainerLocation {
     container = ''
-    IMGS03 = ''
+
+    /**
+     * 倉庫
+     */
+    ime01 = ''
+
+    /**
+     * 儲位
+     */
+    ime02 = ''
+
+    ts?: Date 
 }

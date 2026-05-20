@@ -1,4 +1,4 @@
-export class breadcrumb_item{
+export class breadcrumbItem{
     url?:string
     name?:string
     current = false

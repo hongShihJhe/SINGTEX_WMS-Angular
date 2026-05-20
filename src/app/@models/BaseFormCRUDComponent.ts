@@ -4,8 +4,9 @@ import { SubmitResult, SubmitResultWithData } from "./SubmitResult";
 
 
 
-export class BaseViewComponent {
+export class BaseFormCRUDComponent {
     submitting = false
+
     succState = new FormOpSuccState();
     failState = new FormOpFailState();
 

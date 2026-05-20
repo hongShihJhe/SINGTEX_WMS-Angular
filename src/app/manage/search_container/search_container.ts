@@ -1,8 +1,11 @@
 import { ImgsFileService } from './../../@services/imgs-file-service';
 import { ContainerService } from '../../@services/container-service';
-import { AfterViewInit, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { SearchContainerService } from '../../@services/search-container-service';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
+import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   standalone: true,
@@ -12,33 +15,15 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './search_container.scss',
 })
 
-export class SearchContainer implements OnInit, AfterViewInit {
-  table: any
-  pageLength = 50
-
+export class SearchContainer extends BasePDAComponent implements OnInit, AfterViewInit {
   inputA01?: string
-  container_imgs03?: string
+  container_ime02?: string
 
   @ViewChild('table') tableRef!: ElementRef
   @ViewChild('A01Modal') A01Modal!: ScanModal
 
-  get rows_count() {
-    if (this.table) {
-      return this.table.rows().count()
-    }
-    return 0
-  }
-
-  get table_data(): any[] {
-    if (this.table) {
-      return this.table.rows().data().toArray()
-    }
-    return []
-  }
-
-
-  constructor(private containerService: ContainerService, private imgsFileService: ImgsFileService) {
-
+  constructor(@Inject(IAlertToken) private _IAlert: IAlert, private seacrchContainerService: SearchContainerService) {
+    super()
   }
 
   ngOnInit(): void {
@@ -50,7 +35,7 @@ export class SearchContainer implements OnInit, AfterViewInit {
 
   init_table() {
     let self = this
-    this.table = $(this.tableRef.nativeElement).DataTable({
+    let options = {
       processing: true,
       searching: false,
       serverSide: false,
@@ -63,9 +48,6 @@ export class SearchContainer implements OnInit, AfterViewInit {
       //     d.A01 = self.inputA01
       //   }
       // },
-      columnDefs: [
-        { targets: '_all', orderable: false, defaultContent: '' },
-      ],
       order: [[0, 'asc']], // order 
       columns: [
         { data: 'RVBS04', title: '製造批號', visible: false },
@@ -103,65 +85,25 @@ export class SearchContainer implements OnInit, AfterViewInit {
             }
           }
         },
-
       ],
-      drawCallback: function (settings: any) {
+      drawCallback: function (settings: any) { },
+      initComplete: function (settings: any, json: any) {},
+    }
 
-      },
-      initComplete: function (settings: any, json: any) {
-
-      },
-      // language: {
-      //   url: '@datatable_lang_url',
-      // },
-      pageLength: this.pageLength
-    })
+    this.table = $(this.tableRef.nativeElement).DataTable(this.setTableOptions(options))
   }
 
-
-
-  fetchData(value: string) {
-    this.table.clear().draw()
-
-    this.containerService.getImgsList(value).then(container_imgss => {
-      if (container_imgss.length === 0) {
-        alert('沒有資料')
-      } else {
-        this.imgsFileService.getImgsFileByList(container_imgss.map(item => item.RVBS04)).then(imgs_files => {
-
-          let map = container_imgss.map(container_imgs => {
-            var result: any = {
-              RVBS04: '',
-              TA_RVBS14: '',
-              IMGS02: '',
-              IMGS03: '',
-              IMGS08: '',
-              IMGS07: ''
-            }
-
-            result.RVBS04 = container_imgs.RVBS04
-            result.TA_RVBS14 = container_imgs.TA_RVBS14
-
-            let imgs_file = imgs_files.find(o => o?.IMGS06 === container_imgs.RVBS04)
-            if (imgs_file) {
-              result.IMGS02 = imgs_file.IMGS02
-              result.IMGS03 = imgs_file.IMGS03
-              result.IMGS08 = imgs_file.IMGS08
-              result.IMGS07 = imgs_file.IMGS07
-            }
-
-            return result
-          })
-
-          this.table.rows.add(map).draw()
-        })
-
-      }
-    })
-  }
-
-  A01ModalShow() {
-    this.A01Modal.show()
+  override fetchTableData() {
+    let container = this.inputA01
+    if (container) {
+      this.seacrchContainerService.fetchTableData(container).then(data => {
+        if (!data.length){
+          this._IAlert.Alert('沒有資料')
+        } else {
+          this.addTableRow(data)
+        }
+      })
+    }
   }
 
   A01ModalConfirm(value: string) {
@@ -170,11 +112,12 @@ export class SearchContainer implements OnInit, AfterViewInit {
     }
     this.inputA01 = value
 
-    this.containerService.getLocation(value).then(loc => {
-      this.container_imgs03 = loc?.IMGS03
+    let container = this.inputA01
+    this.seacrchContainerService.getContainerIME02(container).then(ime02 => {
+      this.container_ime02 = ime02
     })
 
-    this.fetchData(value)
+    this.refreshTable()
   }
 
 
