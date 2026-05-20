@@ -3,7 +3,7 @@ import { ContainerService } from './container-service';
 import { AuthService } from './auth-service';
 import { Injectable } from '@angular/core';
 import { Cimt302a } from '../@models/Cimt302a';
-import { Cimt302aApi } from '../@data/cimt302a-api';
+import { Cimt302aApi } from '../@apis/cimt302a-api';
 import { TransferItem } from '../@models/TransferItem';
 import { SubmitResult } from '../@models/SubmitResult';
 

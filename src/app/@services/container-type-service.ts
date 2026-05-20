@@ -1,7 +1,7 @@
 import { ContainerTypeValidatorCodes } from './../@validators/ContainerTypeValidatorCodes';
 import { ContainerTypeValidator } from './../@validators/container-type-validator';
 import { Injectable } from '@angular/core';
-import { ContainerTypeApi } from '../@data/container-type-api';
+import { ContainerTypeApi } from '../@apis/container-type-api';
 import { ContainerType } from '../@models/ContainerType';
 import { SubmitResult, SubmitResultWithData } from '../@models/SubmitResult';
 

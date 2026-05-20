@@ -1,6 +1,6 @@
 import { ContainerService } from './container-service';
 import { AuthService } from './auth-service';
-import { Cimt302aApi } from '../@data/cimt302a-api';
+import { Cimt302aApi } from '../@apis/cimt302a-api';
 import { Injectable } from '@angular/core';
 import { Cimt302a } from '../@models/Cimt302a';
 import { ContainerImgs } from '../@models/ContainerImgs';
