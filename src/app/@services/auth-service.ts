@@ -6,6 +6,7 @@ import { isAuthResult } from '../@models/isAuthResult';
 import { LoginResult } from '../@models/LoginResult';
 import { UserRole } from '../@models/UserRole';
 import { HttpClient } from '@angular/common/http';
+import { PDAFunctionData } from '../@models/PDAFunctionData';
 
 
 // interface loginCallbackFunction {
@@ -42,15 +43,15 @@ export class AuthService {
   login(account: string, password: string) {
     return new Promise<LoginResult>((resolve, reject) => {
       this.http.get(this.base_href + 'login.json').subscribe((res: any) => {
-        var result = new LoginResult()
+        let result = new LoginResult()
 
-        let data = res.data
+        let logins = res.data
 
-        let find = data.find((item: any) => item.account === account && item.password === password)
-        if (find) {
+        let login = logins.find((item: any) => item.account === account && item.password === password)
+        if (login) {
           result.succ = true
 
-          var userData = new LoggedInUserData()
+          let userData = new LoggedInUserData()
           userData.account = account
           userData.expired_date = new Date((new Date().getTime() + this.exp_span_min * 60 * 1000))
 
@@ -60,16 +61,19 @@ export class AuthService {
               userData.roles = userRoles.map(userRole => userRole.role_code)
             }
 
-            // save userData
+            // save jwt token
             localStorage.setItem(this.localStorage_key, JSON.stringify(userData))
 
+            resolve(result)
           })
         } else {
           result.succ = false
           result.message = '帳號或密碼錯誤'
+
+          resolve(result)
         }
 
-        resolve(result)
+        
 
       })
     })
@@ -124,7 +128,39 @@ export class AuthService {
     return false
   }
 
-  hasPermission(func: string) {
+  hasPermissionByParent(func: string){
+    return new Promise<boolean>((resolve, reject) => {
+      if (this.isAdmin()){
+        resolve(true)
+      }
+
+      let children: string[] = PDAFunctionData.getChildren(func).map(o => o.func_code)
+      let childrenPermission = children.map(child => {
+        return this.hasPermission(child)
+      })
+
+      Promise.all(childrenPermission).then(results => {
+        let bool = results.some(result => result === true)
+        resolve(bool)
+      })
+    })
+  }
+
+  hasPermissionByParentList(funcList: string[]){
+    return new Promise<boolean[]>((resolve, reject) => {
+      if (this.isAdmin()){
+        resolve(funcList.map(o => true))
+      }
+
+      let promises = funcList.map(func => this.hasPermissionByParent(func))
+      
+      Promise.all(promises).then(results => {
+        resolve(results)
+      })
+    })
+  }
+
+  hasPermission(func_code: string) {
     return new Promise<boolean>((resolve, rejcet) => {
       if (this.isAdmin()) {
         resolve(true)
@@ -134,11 +170,11 @@ export class AuthService {
       }
       else {
         let user = this.user!
-        this.userPermissionService.hasPermission(user.account, func).then(res => {
+        this.userPermissionService.hasPermission(user.account, func_code).then(res => {
           if (res !== undefined) {
             resolve(res)
           } else {
-            this.rolePermissionService.hasPermissionByRoles(user.roles, func).then(res => {
+            this.rolePermissionService.hasPermissionByRoles(user.roles, func_code).then(res => {
               if (res !== undefined) {
                 resolve(res)
               } else {
@@ -148,8 +184,20 @@ export class AuthService {
           }
         })
       }
+    })
+  }
 
+  hasPermissionList(funcList: string[]) {
+    return new Promise<boolean[]>((resolve, rejcet) => {
+      if (this.isAdmin()) {
+        resolve(funcList.map(o => true))
+      }
 
+      let promises = funcList.map(func => this.hasPermission(func))
+      
+      Promise.all(promises).then(results => {
+        resolve(results)
+      })
     })
   }
 

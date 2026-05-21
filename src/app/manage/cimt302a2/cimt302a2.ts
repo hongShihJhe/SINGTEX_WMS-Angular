@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild
 import { Cimt302a2Service } from '../../@services/cimt302a2-service';
 import { DateUtil } from '../../@utils/DateUtil';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   selector: 'app-cimt302a2',
@@ -10,7 +10,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   templateUrl: './cimt302a2.html',
   styleUrl: './cimt302a2.scss',
 })
-export class Cimt302a2 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Cimt302a2 extends BasePDATableComponent implements OnInit, AfterViewInit {
 
   @ViewChild('table') tableRef!: ElementRef
 

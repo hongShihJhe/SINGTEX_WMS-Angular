@@ -2,6 +2,8 @@ import { AuthService } from '../../@services/auth-service';
 import { RouterLink } from '@angular/router';
 import { FuncNames } from '../../@models/FuncNames';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { PDAFunctionData } from '../../@models/PDAFunctionData';
+import { BasePDAMenuComponent } from '../../@models/BasePDAMenuComponent';
 
 @Component({
   standalone: true,
@@ -11,44 +13,26 @@ import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/cor
   styleUrl: './aimt324.scss',
 })
 
-export class Aimt324 implements OnInit, AfterViewChecked{
-  prg_names = FuncNames
-  menu_icon_size = '50'
+export class Aimt324 extends BasePDAMenuComponent implements OnInit, AfterViewChecked{
+  PDAFunctionDataRef = PDAFunctionData
 
-  aimt324_auth = false
-  container_transfer_auth = false
-  container_binding_auth = false
-  container_change_auth = false
+  override permission: any = {
+    'aimt3240': false,
+    'aimt3241': false,
+    'aimt3242': false,
+    'aimt3243': false,
+  }
  
-
   constructor(private authService: AuthService){
+    super(authService)
   }
   
-
   ngOnInit(): void {
-     this.authService.hasPermission('aimt324').then(res => {
-      this.aimt324_auth = res
-     })
-     this.authService.hasPermission('container_transfer').then(res => {
-      this.container_transfer_auth = res
-     })
-     this.authService.hasPermission('container_binding').then(res => {
-      this.container_binding_auth = res
-     })
-     this.authService.hasPermission('container_change').then(res => {
-      this.container_change_auth = res
-     })
+    this.setPermission()
   }
-
  
   ngAfterViewChecked(): void {
     this.set_menu_icon_size()
   }
 
-  set_menu_icon_size(){
-    document.querySelectorAll('svg').forEach(el => {
-      el.setAttribute('width', this.menu_icon_size)
-      el.setAttribute('height', this.menu_icon_size)
-    })
-  }
 }

@@ -4,7 +4,7 @@ import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   standalone: true,
@@ -14,7 +14,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   styleUrl: './aimt3243.scss',
 })
 
-export class Aimt3243 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Aimt3243 extends BasePDATableComponent implements OnInit, AfterViewInit {
 
   inputA01?: string
   inputA02?: string

@@ -1,22 +1,22 @@
-import { SearchImgsService } from './../../@services/search-imgs-service';
-import { ImgsFileService } from './../../@services/imgs-file-service';
+import { SearchImgsService } from '../../@services/search-imgs-service';
+import { ImgsFileService } from '../../@services/imgs-file-service';
 import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { ContainerImgs } from '../../@models/ContainerImgs';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   standalone: true,
-  selector: 'app-search_imgs',
+  selector: 'app-search1',
   imports: [ScanModal, FormsModule],
-  templateUrl: './search_imgs.html',
-  styleUrl: './search_imgs.scss',
+  templateUrl: './search1.html',
+  styleUrl: './search1.scss',
 })
 
-export class SearchImgs extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Search1 extends BasePDATableComponent implements OnInit, AfterViewInit {
   inputA01?: string
   @ViewChild('table') tableRef!: ElementRef
   @ViewChild('A01Modal') A01Modal!: ScanModal

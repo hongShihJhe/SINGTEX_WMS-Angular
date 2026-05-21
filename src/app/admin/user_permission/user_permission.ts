@@ -137,7 +137,6 @@ export class UserPermission implements OnInit, AfterViewInit {
   }
 
   setRolePermission() {
-    console.log('setRolePermission')
     if (this.account) {
       let data: any = []
 

@@ -1,4 +1,4 @@
-export abstract class BasePDAComponent{
+export abstract class BasePDATableComponent{
 
     table: any
     tableOptions: any = 

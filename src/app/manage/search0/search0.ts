@@ -1,21 +1,21 @@
-import { ImgsFileService } from './../../@services/imgs-file-service';
+import { ImgsFileService } from '../../@services/imgs-file-service';
 import { ContainerService } from '../../@services/container-service';
 import { SearchContainerService } from '../../@services/search-container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 
 @Component({
   standalone: true,
-  selector: 'app-search_container',
+  selector: 'app-search0',
   imports: [ScanModal, FormsModule],
-  templateUrl: './search_container.html',
-  styleUrl: './search_container.scss',
+  templateUrl: './search0.html',
+  styleUrl: './search0.scss',
 })
 
-export class SearchContainer extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Search0 extends BasePDATableComponent implements OnInit, AfterViewInit {
   inputA01?: string
   container_ime02?: string
 

@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { FuncNames } from '../../@models/FuncNames';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PDAFunctionData } from '../../@models/PDAFunctionData';
+import { BasePDAMenuComponent } from '../../@models/BasePDAMenuComponent';
 
 @Component({
   standalone: true,
@@ -12,37 +14,26 @@ import { Observable } from 'rxjs';
   styleUrl: './asft700.scss',
 })
 
-export class Asft700 implements OnInit, AfterViewChecked{
-  prg_names = FuncNames
-  menu_icon_size = '50'
+export class Asft700 extends BasePDAMenuComponent implements OnInit, AfterViewChecked{
+  PDAFunctionDataRef = PDAFunctionData
 
-  auth_asft7000 = true
-  auth_asft7001 = true
-  auth_asft7002 = true
-  auth_asft7003 = true
+  override permission: any = {
+    'asft7000': false,
+    'asft7001': false,
+    'asft7002': false,
+    'asft7003': false,
+  }
 
   constructor(private authService: AuthService){
+    super(authService)
+  }
 
+  ngOnInit(): void {
+    this.setPermission()
   }
 
   ngAfterViewChecked(): void {
     this.set_menu_icon_size()
   }
-
-  ngOnInit(): void {
-  
-  }
-
-  ngAfterViewInit(): void {
-
-  }
-
-  set_menu_icon_size(){
-    document.querySelectorAll('svg').forEach(el => {
-      el.setAttribute('width', this.menu_icon_size)
-      el.setAttribute('height', this.menu_icon_size)
-    })
-  }
-
 
 }

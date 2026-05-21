@@ -29,8 +29,8 @@ export class FuncNames {
         "asft6203": "倉庫入庫與點收",
         "asft6204": "查詢",
         "search": "查詢",
-        "search_container": "載體查詢",
-        "search_imgs": "製造批號或布疋號查詢",
+        "search0": "載體查詢",
+        "search1": "製造批號或布疋號查詢",
         "csfi301": "工單登記",
     }
 

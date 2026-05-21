@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { FuncNames } from '../../@models/FuncNames';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PDAFunctionData } from '../../@models/PDAFunctionData';
+import { BasePDAMenuComponent } from '../../@models/BasePDAMenuComponent';
 
 @Component({
   standalone: true,
@@ -12,37 +14,26 @@ import { Observable } from 'rxjs';
   styleUrl: './csfi514.scss',
 })
 
-export class Csfi514 implements OnInit, AfterViewChecked{
-  prg_names = FuncNames
-  menu_icon_size = '50'
+export class Csfi514 extends BasePDAMenuComponent implements OnInit, AfterViewChecked{
+  PDAFunctionDataRef = PDAFunctionData
 
-  auth_csfi5140 = true
-  auth_csfi5141 = true
-  auth_container_binding_location = true
-  auth_csfi514_query = true
+  override permission: any = {
+    'csfi5140': false,
+    'csfi5141': false,
+    'csfi5142': false,
+    'csfi5143': false,
+  }
 
   constructor(private authService: AuthService){
+    super(authService)
+  }
 
+  ngOnInit(): void {
+    this.setPermission()
   }
 
   ngAfterViewChecked(): void {
     this.set_menu_icon_size()
   }
-
-  ngOnInit(): void {
-  
-  }
-
-  ngAfterViewInit(): void {
-
-  }
-
-  set_menu_icon_size(){
-    document.querySelectorAll('svg').forEach(el => {
-      el.setAttribute('width', this.menu_icon_size)
-      el.setAttribute('height', this.menu_icon_size)
-    })
-  }
-
 
 }

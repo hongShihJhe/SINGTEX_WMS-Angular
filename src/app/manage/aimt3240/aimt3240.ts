@@ -5,7 +5,7 @@ import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   standalone: true,
@@ -15,7 +15,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   styleUrl: './aimt3240.scss',
 })
 
-export class Aimt3240 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Aimt3240 extends BasePDATableComponent implements OnInit, AfterViewInit {
   override fetchTableData(): void {
     throw new Error('Method not implemented.');
   }

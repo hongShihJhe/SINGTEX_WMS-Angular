@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FuncNames } from '../@models/FuncNames';
 import { SubmitResult } from '../@models/SubmitResult';
 import { UserPermission } from '../@models/UserPermission';
+import { PDAFunctionData } from '../@models/PDAFunctionData';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +26,8 @@ export class UserPermissionService {
   }
 
   private transform(data: UserPermission) {
-    let o: any = { parent_func_code: 'cimt302a', parent_func_name: FuncNames.get('cimt302a') }
-    o.func_name = FuncNames.get(data.func_code)
+    let o: any = { parent_func_code: 'cimt302a', parent_func_name: PDAFunctionData.getName('cimt302a') }
+    o.func_name = PDAFunctionData.getName(data.func_code)
     return Object.assign(o, data)
   }
 

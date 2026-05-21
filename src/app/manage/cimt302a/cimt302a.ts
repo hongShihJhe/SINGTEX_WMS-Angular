@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { FuncNames } from '../../@models/FuncNames';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PDAFunctionData } from '../../@models/PDAFunctionData';
+import { BasePDAMenuComponent } from '../../@models/BasePDAMenuComponent';
 
 @Component({
   standalone: true,
@@ -12,44 +14,26 @@ import { Observable } from 'rxjs';
   styleUrl: './cimt302a.scss',
 })
 
-export class Cimt302a implements OnInit, AfterViewChecked{
-  prg_names = FuncNames
-  menu_icon_size = '50'
+export class Cimt302a extends BasePDAMenuComponent implements OnInit, AfterViewChecked{
+  PDAFunctionDataRef = PDAFunctionData
 
-  cimt302a0_permission = false
-  cimt302a1_permission = false
-  cimt302a2_permission = false
+  override permission: any = {
+    "cimt302a0": false,
+    "cimt302a1": false,
+    "cimt302a2": false,
+  }
 
   constructor(private authService: AuthService){
-
+    super(authService)
   }
+
+  ngOnInit(): void {
+    this.setPermission()
+  }
+
 
   ngAfterViewChecked(): void {
     this.set_menu_icon_size()
   }
-
-  ngOnInit(): void {
-     this.authService.hasPermission('cimt302a0').then(res => {
-      this.cimt302a0_permission = res
-     })
-     this.authService.hasPermission('cimt302a1').then(res => {
-      this.cimt302a1_permission = res
-     })
-     this.authService.hasPermission('cimt302a2').then(res => {
-      this.cimt302a2_permission = res
-     })
-  }
-
-  ngAfterViewInit(): void {
-
-  }
-
-  set_menu_icon_size(){
-    document.querySelectorAll('svg').forEach(el => {
-      el.setAttribute('width', this.menu_icon_size)
-      el.setAttribute('height', this.menu_icon_size)
-    })
-  }
-
 
 }

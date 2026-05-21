@@ -9,7 +9,7 @@ import { TransferItem } from '../../@models/TransferItem';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { StringUtil } from '../../@utils/StringUtil';
 import { TransferService } from '../../@services/transfer-service';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   styleUrl: './aimt3242.scss',
 })
 
-export class Aimt3242 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Aimt3242 extends BasePDATableComponent implements OnInit, AfterViewInit {
   inputA01?: string
   inputA02?: string
 

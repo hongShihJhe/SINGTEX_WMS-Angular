@@ -7,7 +7,7 @@ import { Cimt302a1Service } from '../../@services/cimt302a1-service';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { Aimt3240Service } from '../../@services/aimt3240-service';
 import { TransferService } from '../../@services/transfer-service';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   standalone: true,
@@ -17,7 +17,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   styleUrl: './cimt302a1.scss',
 })
 
-export class Cimt302a1 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Cimt302a1 extends BasePDATableComponent implements OnInit, AfterViewInit {
   inputA01?: string
   inputA02?: string
 

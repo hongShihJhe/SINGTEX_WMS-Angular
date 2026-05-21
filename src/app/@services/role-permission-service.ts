@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RolePermission } from '../@models/RolePermission';
 import { FuncNames } from '../@models/FuncNames';
 import { SubmitResult } from '../@models/SubmitResult';
+import { PDAFunctionData } from '../@models/PDAFunctionData';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,7 @@ export class RolePermissionService {
   private base_href = document.baseURI
   readonly localStorage_key = 'role_permission'
 
-
-  getList() {
+  getData() {
     return new Promise<RolePermission[]>((resolve, reject) => {
       let _data: RolePermission[] = []
       let _json = localStorage.getItem(this.localStorage_key)
@@ -24,36 +24,34 @@ export class RolePermissionService {
     })
   }
 
-  createPermssionItem(parent: string, func: string){
-    return {
-      parent_func_code: parent,
-      parent_func_name: FuncNames.get(parent),
-      func_code: func,
-      func_name: FuncNames.get(func),
-      enabled: 'N'
-    }
+  createDefaultViewData(){
+    let data = PDAFunctionData.data
+    let filter = data.filter(o => o.parent)
+    let map = filter.map(item => {
+      let result: any = {}
+
+      result.parent_func_code = item.parent
+      result.parent_func_name = PDAFunctionData.getName(item.parent)
+      result.func_code = item.func_code
+      result.func_name = item.func_name
+      result.enabled = 'N'
+
+      return result
+    })
+
+    return map
   }
 
   getListByRole(role_code: string) {
     return new Promise((resolve, reject) => {
-      let default_data = [
-        this.createPermssionItem('cimt302a', 'cimt302a0'),
-        this.createPermssionItem('cimt302a', 'cimt302a1'),
-        this.createPermssionItem('cimt302a', 'cimt302a2'),
-        this.createPermssionItem('aimt324', 'aimt3240'),
-        this.createPermssionItem('aimt324', 'aimt3241'),
-        this.createPermssionItem('aimt324', 'aimt3242'),
-        this.createPermssionItem('aimt324', 'aimt3243'),
-        this.createPermssionItem('search', 'search_container'),
-        this.createPermssionItem('search', 'search_imgs'),
-      ]
+      let defaultViewdata = this.createDefaultViewData()
 
-      this.getList().then(data => {
-        let role_permission = data.filter(item => item.role_code === role_code)
-        if (role_permission.length) {
-          resolve(role_permission.map(item => this.transform(item)))
+      this.getData().then(rolePermissions => {
+        let filter = rolePermissions.filter(item => item.role_code === role_code)
+        if (filter.length) {
+          resolve(this.toViewData(filter))
         } else {
-          resolve(default_data)
+          resolve(defaultViewdata)
         }
       })
     })
@@ -61,7 +59,7 @@ export class RolePermissionService {
 
   hasPermission(role: string, func: string) {
     return new Promise<boolean | undefined>((resolve) => {
-      this.getList().then(data => {
+      this.getData().then(data => {
         let data_role = data.filter(item => item.role_code === role)
         if (!data_role.length) {
           resolve(undefined)
@@ -76,7 +74,7 @@ export class RolePermissionService {
 
   hasPermissionByRoles(roles: string[], func: string) {
     return new Promise<boolean | undefined>((resolve) => {
-      this.getList().then(data => {
+      this.getData().then(data => {
         let data_role = data.filter(item => roles.includes(item.role_code))
         if (!data_role.length) {
           resolve(undefined)
@@ -117,10 +115,19 @@ export class RolePermissionService {
     })
   }
 
-  private transform(data: RolePermission) {
-    let o: any = { parent_func_code: 'cimt302a', parent_func_name: FuncNames.get('cimt302a') }
-    o.func_name = FuncNames.get(data.func_code)
-    return Object.assign(o, data)
+  private toViewData(rolePermissions: RolePermission[]) {
+    let viewData = this.createDefaultViewData()
+
+
+    rolePermissions.forEach((rolePermission, idx) => {
+      let viewRow = viewData.find(o => o.func_code === rolePermission.func_code)
+      if (viewRow){
+        viewRow.enabled = rolePermission.enabled
+      }
+    })
+
+
+    return viewData
   }
 
 }

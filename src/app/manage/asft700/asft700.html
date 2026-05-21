@@ -1,16 +1,16 @@
 <div class="container">
     <div class="row">
-        @if (auth_asft7000){
+        @if (permission.asft7000){
         <div class=" col-6 col-lg-4">
             <a [routerLink]="['asft7000']">
                 <div class="menu-item d-flex flex-column text-center justify-content-center">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="PDAMenuSVG bi bi-cart2" viewBox="0 0 16 16">
                             <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
                         </svg>
                     </div>
                     <div>
-                        <label class="title">{{prg_names.get("asft7000")}}</label>
+                        <label class="title">{{PDAFunctionDataRef.getName("asft7000")}}</label>
                     </div>
                 </div>
             </a>
@@ -18,17 +18,17 @@
         }
 
 
-        @if (auth_asft7001){
+        @if (permission.asft7001){
         <div class=" col-6 col-lg-4">
             <a [routerLink]="['asft7001']">
                 <div class="menu-item d-flex flex-column text-center justify-content-center">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="PDAMenuSVG bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                         </svg>
                     </div>
                     <div>
-                        <label class="title">{{prg_names.get("asft7001")}}</label>
+                        <label class="title">{{PDAFunctionDataRef.getName("asft7001")}}</label>
                     </div>
                 </div>
             </a>
@@ -36,36 +36,36 @@
         }
 
 
-        @if (auth_asft7002){
+        @if (permission.asft7002){
         <div class=" col-6 col-lg-4" >
             <a [routerLink]="['asft7002']">
                 <div class="menu-item d-flex flex-column text-center justify-content-center">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="PDAMenuSVG bi bi-clock" viewBox="0 0 16 16">
                             <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                         </svg>
                     </div>
                     <div>
-                        <label class="title">{{prg_names.get("asft7002")}}</label>
+                        <label class="title">{{PDAFunctionDataRef.getName("asft7002")}}</label>
                     </div>
                 </div>
             </a>
         </div>
         }
 
-        @if (auth_asft7003){
+        @if (permission.asft7003){
         <div class=" col-6 col-lg-4" >
             <a [routerLink]="['asft7003']">
                 <div class="menu-item d-flex flex-column text-center justify-content-center">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-alarm" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="PDAMenuSVG bi bi-alarm" viewBox="0 0 16 16">
                             <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9z" />
                             <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1zm1.038 3.018a6 6 0 0 1 .924 0 6 6 0 1 1-.924 0M0 3.5c0 .753.333 1.429.86 1.887A8.04 8.04 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5M13.5 1c-.753 0-1.429.333-1.887.86a8.04 8.04 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1" />
                         </svg>
                     </div>
                     <div>
-                        <label class="title">{{prg_names.get("asft7003")}}</label>
+                        <label class="title">{{PDAFunctionDataRef.getName("asft7003")}}</label>
                     </div>
                 </div>
             </a>

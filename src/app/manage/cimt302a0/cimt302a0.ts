@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { Cimt302a0Service } from '../../@services/cimt302a0-service';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
-import { BasePDAComponent } from '../../@models/BasePDAComponent';
+import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
 
 @Component({
   standalone: true,
@@ -15,7 +15,7 @@ import { BasePDAComponent } from '../../@models/BasePDAComponent';
   styleUrl: './cimt302a0.scss',
 })
 
-export class Cimt302a0 extends BasePDAComponent implements OnInit, AfterViewInit {
+export class Cimt302a0 extends BasePDATableComponent implements OnInit, AfterViewInit {
   inputA01?: string
   inputA02?: string
 

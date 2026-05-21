@@ -2,6 +2,8 @@ import { AuthService } from './../../@services/auth-service';
 import { RouterLink } from '@angular/router';
 import { FuncNames } from '../../@models/FuncNames';
 import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { PDAFunctionData } from '../../@models/PDAFunctionData';
+import { BasePDAMenuComponent } from '../../@models/BasePDAMenuComponent';
 
 @Component({
   standalone: true,
@@ -11,34 +13,24 @@ import { AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/cor
   styleUrl: './search.scss',
 })
 
-export class Search implements OnInit, AfterViewChecked {
-  prg_names = FuncNames
-  menu_icon_size = '50'
+export class Search extends BasePDAMenuComponent implements OnInit, AfterViewChecked {
+  PDAFunctionDataRef = PDAFunctionData
 
-  search_container_auth = false
-  search_imgs_auth = false
-
-  constructor(private authService: AuthService) {
+  override permission: any = {
+    'search0': false,
+    'search1': false,
   }
 
+  constructor(private authService: AuthService) {
+    super(authService)
+  }
 
   ngOnInit(): void {
-    this.authService.hasPermission('search_container').then(res => {
-      this.search_container_auth = res
-    })
-    this.authService.hasPermission('search_imgs').then(res => {
-      this.search_imgs_auth = res
-    })
+    this.setPermission()
   }
 
   ngAfterViewChecked(): void {
     this.set_menu_icon_size()
   }
 
-  set_menu_icon_size() {
-    document.querySelectorAll('svg').forEach(el => {
-      el.setAttribute('width', this.menu_icon_size)
-      el.setAttribute('height', this.menu_icon_size)
-    })
-  }
 }
