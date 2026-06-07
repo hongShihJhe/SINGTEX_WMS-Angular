@@ -1,5 +1,7 @@
 # SINGTEX_WMS-Angular
 
+在線網址: https://hongShihJhe.github.io/WMS_Demo
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
 
 ## Development server
