@@ -1,7 +1,7 @@
 import { Aimt3243Service } from './../../@services/aimt3243-service';
 import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
-import { ScanModal } from "../scan-modal/scan-modal";
+import { ScanModal } from '../../@shared/scan-modal/scan-modal';
 import { FormsModule } from '@angular/forms';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { BasePDATableComponent } from '../../@models/BasePDATableComponent';

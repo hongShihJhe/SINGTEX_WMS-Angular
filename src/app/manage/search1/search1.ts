@@ -2,7 +2,7 @@ import { SearchImgsService } from '../../@services/search-imgs-service';
 import { ImgsFileService } from '../../@services/imgs-file-service';
 import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
-import { ScanModal } from "../scan-modal/scan-modal";
+import { ScanModal } from '../../@shared/scan-modal/scan-modal';
 import { FormsModule } from '@angular/forms';
 import { ContainerImgs } from '../../@models/ContainerImgs';
 import { BasePDATableComponent } from '../../@models/BasePDATableComponent';

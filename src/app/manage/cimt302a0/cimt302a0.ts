@@ -1,6 +1,6 @@
 import { ContainerService } from './../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
-import { ScanModal } from "../scan-modal/scan-modal";
+import { ScanModal } from '../../@shared/scan-modal/scan-modal';
 import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { Cimt302a0Service } from '../../@services/cimt302a0-service';

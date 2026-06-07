@@ -1,15 +1,11 @@
 import { Aimt3242Service } from './../../@services/aimt3242-service';
-import { ImgsFileService } from '../../@services/imgs-file-service';
-import { ContainerService } from '../../@services/container-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
-import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
-import { ContainerImgsInfo } from '../../@models/ContainerImgsInfo';
 import { TransferItem } from '../../@models/TransferItem';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { StringUtil } from '../../@utils/StringUtil';
-import { TransferService } from '../../@services/transfer-service';
 import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
+import { ScanModal } from '../../@shared/scan-modal/scan-modal';
 
 @Component({
   standalone: true,

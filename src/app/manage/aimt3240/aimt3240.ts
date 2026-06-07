@@ -1,11 +1,11 @@
 import { ContainerService } from '../../@services/container-service';
 import { Aimt3240Service } from '../../@services/aimt3240-service';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, signal, ViewChild } from '@angular/core';
-import { ScanModal } from "../scan-modal/scan-modal";
 import { FormsModule } from '@angular/forms';
 import { DataTableUtil } from '../../@utils/DataTableHelper';
 import { IAlert, IAlertToken } from '../../@interfaces/IAlert';
 import { BasePDATableComponent } from '../../@models/BasePDATableComponent';
+import { ScanModal } from '../../@shared/scan-modal/scan-modal';
 
 @Component({
   standalone: true,
