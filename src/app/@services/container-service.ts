@@ -30,6 +30,39 @@ export class ContainerService {
 
   }
 
+  feedData(){
+    let data = new Container()
+    data.container_type = 'A'
+    data.container_no = '001'
+    data.memo = '預設自動產生'
+
+    let data2 = new Container()
+    data2.container_type = 'A'
+    data2.container_no = '002'
+    data2.memo = '預設自動產生'
+
+    let data3 = new Container()
+    data3.container_type = 'A'
+    data3.container_no = '003'
+    data3.memo = '預設自動產生'
+
+    this.containerApi.checkExists(data.container_type, data.container_no).then(bool => {
+      if (!bool){
+        this._add(data)
+      }
+    })
+    this.containerApi.checkExists(data2.container_type, data2.container_no).then(bool => {
+      if (!bool){
+        this._add(data2)
+      }
+    })
+    this.containerApi.checkExists(data3.container_type, data3.container_no).then(bool => {
+      if (!bool){
+        this._add(data3)
+      }
+    })
+  }
+
   get(container_type: string, container_no: string){
     return this.containerApi.get(container_type, container_no)
   }
@@ -112,8 +145,18 @@ export class ContainerService {
     })
   }
 
+  add(data: Container){
+    let _validateAddHandler = new checkHandler<Container>(this.validateAdd.bind(this))
+    let _checkExistsHandler = new checkHandler<Container>(this.checkExistsWhenAdd.bind(this))
+    let _addHandler = new checkHandler<Container>(this._add.bind(this))
 
-  private validateAdd(data: Container) {
+    _validateAddHandler.setNext(_checkExistsHandler)
+    _checkExistsHandler.setNext(_addHandler)
+
+    return _validateAddHandler.handleFunc(data)
+  }
+
+  validateAdd(data: Container) {
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
 
@@ -154,18 +197,20 @@ export class ContainerService {
   }
   
 
-  add(data: Container){
-    let _validateAddHandler = new checkHandler<Container>(this.validateAdd.bind(this))
-    let _checkExistsHandler = new checkHandler<Container>(this.checkExistsWhenAdd.bind(this))
-    let _addHandler = new checkHandler<Container>(this._add.bind(this))
+  
 
-    _validateAddHandler.setNext(_checkExistsHandler)
-    _checkExistsHandler.setNext(_addHandler)
+  update(data: Container){
+    let _validateUpdateHandler = new checkHandler<Container>(this.validateUpdate.bind(this))
+    let _checkExistsHandler = new checkHandler<Container>(this.checkExistsWhenUpdate.bind(this))
+    let _updateHandler = new checkHandler<Container>(this._update.bind(this))
 
-    return _validateAddHandler.handleFunc(data)
+    _validateUpdateHandler.setNext(_checkExistsHandler)
+    _checkExistsHandler.setNext(_updateHandler)
+
+    return _validateUpdateHandler.handleFunc(data)
   }
 
-  private validateUpdate(data: Container){
+  validateUpdate(data: Container){
     return new Promise<SubmitResult>((resolve, reject) => {
       let result = new SubmitResult()
 
@@ -206,16 +251,7 @@ export class ContainerService {
     })
   }
 
-  update(data: Container){
-    let _validateUpdateHandler = new checkHandler<Container>(this.validateUpdate.bind(this))
-    let _checkExistsHandler = new checkHandler<Container>(this.checkExistsWhenUpdate.bind(this))
-    let _updateHandler = new checkHandler<Container>(this._update.bind(this))
-
-    _validateUpdateHandler.setNext(_checkExistsHandler)
-    _checkExistsHandler.setNext(_updateHandler)
-
-    return _validateUpdateHandler.handleFunc(data)
-  }
+  
   
   delete(container_type: string, container_no: string){
     let result = new SubmitResult()

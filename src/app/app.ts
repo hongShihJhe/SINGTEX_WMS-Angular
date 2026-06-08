@@ -1,3 +1,5 @@
+import { ContainerService } from './@services/container-service';
+import { ContainerTypeService } from './@services/container-type-service';
 import { Renderer2, Component, OnInit, signal, Inject, DOCUMENT } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProgressBar } from "./@shared/progress-bar/progress-bar";
@@ -14,12 +16,17 @@ export class App implements OnInit {
 
   constructor(
     private _renderer2: Renderer2,
-    @Inject(DOCUMENT) private _document: Document
+    @Inject(DOCUMENT) private _document: Document,
+    private containerTypeService: ContainerTypeService,
+    private containerService: ContainerService
   ) { 
   }
 
   ngOnInit(): void {
     // AlertStatic.setObject(new SweetAlert2Util())
+
+    this.containerTypeService.feedData()
+    this.containerService.feedData()
   }
 
   // loadScripts() {
